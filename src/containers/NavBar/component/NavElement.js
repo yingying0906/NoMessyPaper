@@ -21,6 +21,14 @@ const typographyData = [
     isAuthRequired: true,
   },
   {
+    text: "Search",
+    href: "/Search",
+    isVisible: { xs: "none", md: "flex" },
+    extraStyles: { mr: 2 },
+    isAuthRequired: true,
+  },
+
+  {
     text: "Manage",
     href: "/Home",
     isVisible: { xs: "none", md: "flex" },
