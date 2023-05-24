@@ -1,0 +1,15 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-title-text {
+    font-size: 20px;
+    font-weight: 1000;
+    color: blue;
+}
+
+.card-link-noUnderline {
+    text-decoration: none;
+}
