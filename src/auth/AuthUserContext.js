@@ -1,18 +1,17 @@
-import { useEffect, useState, createContext } from "react";
-
-import { useNavigate } from "react-router-dom";
+import * as React from "react";
 
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
-export const AuthUserContext = createContext();
+export const AuthUserContext = React.createContext();
 
 const AuthUserProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState(null);
   const navigate = useNavigate();
+  const [authUser, setAuthUser] = React.useState(null);
 
-  // change user
-  useEffect(() => {
+  // change user once auth state changes
+  React.useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
       if (user) {
         setAuthUser(user);
@@ -35,15 +34,14 @@ const AuthUserProvider = ({ children }) => {
       .catch((error) => console.log(error));
   };
 
-  // return
+  // return context
   const contextValue = {
     authUser,
     userSignOut,
   };
   return (
     <AuthUserContext.Provider value={contextValue}>
-      {" "}
-      {children}{" "}
+      {children}
     </AuthUserContext.Provider>
   );
 };

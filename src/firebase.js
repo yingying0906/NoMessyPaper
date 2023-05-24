@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -13,7 +14,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyARGBcyklI11bQd4dNdGJ0MwbJtStNGARM",
   authDomain: "referencemanagement-81918.firebaseapp.com",
-  databaseURL: "https://referencemanagement-81918-default-rtdb.firebaseio.com/",
+  databaseURL: "https://referencemanagement-81918-default-rtdb.firebaseio.com",
   projectId: "referencemanagement-81918",
   storageBucket: "referencemanagement-81918.appspot.com",
   messagingSenderId: "25597210813",
@@ -27,5 +28,5 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const db = getDatabase(app);
-
-export { db, auth, provider };
+const storage = getStorage(app);
+export { db, auth, provider, storage };

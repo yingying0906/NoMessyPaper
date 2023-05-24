@@ -1,15 +1,16 @@
+import * as React from "react";
 import { TextField, Button } from "@mui/material";
 
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
-import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../auth/AuthUserContext";
 
 const SignUp = () => {
-  const { authUser } = useContext(AuthUserContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { authUser } = React.useContext(AuthUserContext);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const navigate = useNavigate();
 
   const signUp = (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ const SignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         alert("Account created successfully");
-        window.location.reload();
+        navigate("/Home");
         console.log(userCredential);
       })
       .catch((error) => {
@@ -35,7 +36,7 @@ const SignUp = () => {
     <div>
       <form autoComplete="off" onSubmit={signUp}>
         <TextField
-          disabled={authUser}
+          disabled={authUser !== null}
           label="Email"
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -47,7 +48,7 @@ const SignUp = () => {
           value={email}
         />
         <TextField
-          disabled={authUser}
+          disabled={authUser !== null}
           label="Password"
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -59,7 +60,12 @@ const SignUp = () => {
           sx={{ mb: 2 }}
         />
 
-        <Button type="submit" variant="contained" style={{ width: "100%" }}>
+        <Button
+          disabled={authUser !== null}
+          type="submit"
+          variant="contained"
+          style={{ width: "100%" }}
+        >
           SignUp
         </Button>
       </form>

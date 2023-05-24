@@ -1,13 +1,13 @@
+import * as React from "react";
 import "./IntroPage.css";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { AuthUserContext } from "../../auth/AuthUserContext";
 
 import homeimg from "../../assets/homeImg.png";
 
 const IntroPage = (props) => {
-  const { authUser } = useContext(AuthUserContext);
+  const { authUser } = React.useContext(AuthUserContext);
 
   return (
     <div className="IntroPage">

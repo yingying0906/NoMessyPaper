@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import AuthUserProvider from "./auth/AuthUserContext";
+import BackDropProvider from "./pages/HomePage/component/backDrop/BackDropContext";
+import SnackBarProvider from "./containers/SnackBars/SnackBarContext";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 
@@ -12,7 +15,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthUserProvider>
-        <App />
+        <SnackBarProvider>
+          <BackDropProvider>
+            <App />
+          </BackDropProvider>
+        </SnackBarProvider>
       </AuthUserProvider>
     </BrowserRouter>
   </React.StrictMode>

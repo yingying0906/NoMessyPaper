@@ -1,24 +1,24 @@
-.IntroPageFlex{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+.IntroPageFlex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.IntroPageFlex > div{
-    width: 40vw;
+.IntroPageFlex > div {
+  width: 40vw;
 }
 
-.IntroPageFlexLeft{
-    text-align: left;
+.IntroPageFlexLeft {
+  text-align: left;
 }
 
-.IntroPageFlexLeft *{
-    margin-bottom: 20px;
+.IntroPageFlexLeft * {
+  margin-bottom: 20px;
 }
 
-.IntroPageFlexRight > img{
-    width: 80%;
-    margin: 10%;
-    border-radius: 500px;
+.IntroPageFlexRight > img {
+  width: 80%;
+  margin: 10%;
+  border-radius: 500px;
 }

@@ -1,23 +1,23 @@
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button } from "@mui/material";
 
 import { auth, provider } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+
 import { Google } from "@mui/icons-material";
-import { signInWithPopup } from "firebase/auth";
-
-import { useState, useContext } from "react";
-import { AuthUserContext } from "../auth/AuthUserContext";
-
 import LoginIcon from "@mui/icons-material/Login";
+import { TextField, Button } from "@mui/material";
+
+import { AuthUserContext } from "../auth/AuthUserContext";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { authUser } = useContext(AuthUserContext);
+  const { authUser } = React.useContext(AuthUserContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
+  // sign in with email
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
@@ -38,6 +38,8 @@ const SignIn = () => {
         console.log(error);
       });
   };
+
+  // sign in with google
   const signInGoogle = (e) => {
     e.preventDefault();
     signInWithPopup(auth, provider)

@@ -1,19 +1,28 @@
 import "./HomePage.css";
-import { writeNewReference } from "../../database/controlDatabase";
-import { Button } from "@mui/material";
-import RefTable from "./RefTable";
+import * as React from "react";
 
-import { useContext, useEffect, useState } from "react";
+import ReferenceTable from "./ReferenceTable";
+
 import { AuthUserContext } from "../../auth/AuthUserContext";
+import { BackDropContext } from "./component/backDrop/BackDropContext";
 
-import { ref, onValue, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { db } from "../../firebase";
 
-const HomePage = () => {
-  const { authUser } = useContext(AuthUserContext);
-  const [references, setReferences] = useState([]);
+import Backdrop from "@mui/material/Backdrop";
+import AddReferenceBackDrop from "./component/backDrop/add/AddReferenceBackDrop";
+import EditReferenceBackDrop from "./component/backDrop/edit/EditReferenceBackDrop";
 
-  useEffect(() => {
+import CircularProgress from "@mui/material/CircularProgress";
+
+const HomePage = () => {
+  const { authUser } = React.useContext(AuthUserContext);
+
+  const [loading, setLoading] = React.useState(true);
+  const { references, setReferences } = React.useContext(BackDropContext);
+
+  // keep getting data from database
+  React.useEffect(() => {
     const referenceRef = ref(db, `referenceList/${authUser?.uid}`);
     const handleChange = (snapshot) => {
       if (snapshot.exists()) {
@@ -27,8 +36,10 @@ const HomePage = () => {
         );
 
         setReferences(referencesArray);
+        setLoading(false);
       } else {
         setReferences([]);
+        setLoading(false);
       }
     };
     const referenceListener = onValue(
@@ -37,19 +48,54 @@ const HomePage = () => {
         handleChange(snapshot);
       },
       {
-        onlyOnce: false, // Add this option to prevent the null error
+        onlyOnce: false,
       }
     );
 
-    // Clean up the listener when the component unmounts
+    // Clean up the listener
     return () => {
-      referenceListener(); // Unsubscribe from the listener
+      referenceListener();
     };
-  }, [authUser]);
+  }, [authUser, setReferences]);
 
+  // backdrop
+
+  const { openAdd, setOpenAdd, openEdit, setOpenEdit } =
+    React.useContext(BackDropContext);
+
+  const handleClose = (event) => {
+    setOpenAdd(false);
+    setOpenEdit(false);
+  };
+
+  // rendering
   return (
     <div className="Homepage">
-      <RefTable references={references} />
+      {loading ? (
+        <CircularProgress color="primary" />
+      ) : (
+        <ReferenceTable references={references} />
+      )}
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openAdd}
+        onClick={handleClose}
+      >
+        <div onClick={(e) => e.stopPropagation()}>
+          <AddReferenceBackDrop handleClose={handleClose} />
+        </div>
+      </Backdrop>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openEdit}
+        onClick={handleClose}
+      >
+        <div onClick={(e) => e.stopPropagation()}>
+          <EditReferenceBackDrop handleClose={handleClose} />
+        </div>
+      </Backdrop>
     </div>
   );
 };

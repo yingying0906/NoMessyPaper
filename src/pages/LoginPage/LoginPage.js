@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import * as React from "react";
 import { Box } from "@mui/material";
 
 import Tab from "@mui/material/Tab";
@@ -12,7 +11,7 @@ import SignIn from "../../auth/SignIn";
 import SignUp from "../../auth/SignUp";
 
 const LoginPage = () => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

@@ -6,7 +6,7 @@ import NavBar from "./containers/NavBar/NavBar";
 import IntroPage from "./pages/IntroPage/IntroPage";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import AddRefPage from "./pages/AddRefPage/AddRefPage";
+import AddReferencePage from "./pages/AddReferencePage/AddReferencePage";
 
 function App() {
   const theme = createTheme({
@@ -34,7 +34,6 @@ function App() {
           transition: "color 0.3s ease",
         },
       },
-      // Add more styles for other typography variants if needed
     },
   });
 
@@ -46,7 +45,7 @@ function App() {
           <Route path="/" element={<IntroPage />} />
           <Route path="/Home" element={<HomePage />} />
           <Route path="/Login" element={<LoginPage />} />
-          <Route path="/Add" element={<AddRefPage />} />
+          <Route path="/Add" element={<AddReferencePage />} />
         </Routes>
       </ThemeProvider>
     </div>

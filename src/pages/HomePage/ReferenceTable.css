@@ -1,0 +1,10 @@
+.ReferenceTable p {
+  margin: 0;
+}
+
+.RefTableToolbar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 10px;
+}
