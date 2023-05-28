@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import AddReferencePage from "./pages/AddReferencePage/AddReferencePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
+import AccountPage from "./pages/AccountPage/AccountPage";
 
 function App() {
   const theme = createTheme({
@@ -48,6 +49,7 @@ function App() {
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Add" element={<AddReferencePage />} />
           <Route path="/Search" element={<SearchPage />} />
+          <Route path="/Account" element={<AccountPage />} />
         </Routes>
       </ThemeProvider>
     </div>
