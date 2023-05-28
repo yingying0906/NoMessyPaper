@@ -1,2 +1,8 @@
 [build]
-  functions = "functions"
+  command = "npm run build" # Replace with your build command
+
+[dev]
+  command = "npm run start" # Replace with your start command
+
+[functions]
+  directory = "functions" # Replace with the directory name containing your server.js file
