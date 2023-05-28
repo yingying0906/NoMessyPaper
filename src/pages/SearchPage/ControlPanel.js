@@ -1,5 +1,7 @@
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, Box, Container, Input, Paper, Toolbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react"
-import { Container, Form, Row } from "react-bootstrap"
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const ControlPanel = ({ setFromYear, setToYear, setNumOfResults }) => {
 
@@ -23,12 +25,8 @@ const ControlPanel = ({ setFromYear, setToYear, setNumOfResults }) => {
 
 
     // year filter 
-    const [yearOnClick, setYearOnClick] = useState(false);
     const [fromYearValue, setFromYearValue] = useState("");
     const [toYearValue, setToYearValue] = useState("");
-    function year() {
-        setYearOnClick(!yearOnClick);
-    }
     function fromYearChange(e) {
         setFromYearValue(e.target.value)
         setFromYear(e.target.value)
@@ -39,13 +37,8 @@ const ControlPanel = ({ setFromYear, setToYear, setNumOfResults }) => {
     }
 
 
-
     // number of results filter
-    const [numOfResultsOnClick, setNumOfResultsOnClick] = useState(false);
     const [numOfResultsValue, setNumOfResultsValue] = useState("")
-    function numOfResults() {
-        setNumOfResultsOnClick(!numOfResultsOnClick);
-    }
     function numOfResultsChange(e) {
         setNumOfResultsValue(e.target.value)
         setNumOfResults(e.target.value)
@@ -54,39 +47,81 @@ const ControlPanel = ({ setFromYear, setToYear, setNumOfResults }) => {
 
     return (
         <Container >
-            <div className="card card-body" style={{ marginTop: "10px" }}>
-                <h2 className="center">Filter Tool</h2>
-
-                <button onClick={year}
-                    className="btn btn-primary"
-                    type="button"
-                    style={{ margin: "10px" }}>
-                    Year
-                </button>
-                {yearOnClick && <Row className="justify-content-center " >
-                    <Row >
-                        <div className="col-4 center" >From</div>
-                        <div className="col-8"><Form.Control type="text" value={fromYearValue} onChange={fromYearChange} /></div>
-                    </Row>
-                    <Row style={{ marginTop: "5px" }}>
-                        <div className="col-4 center" >To</div>
-                        <div className="col-8"><Form.Control type="text" value={toYearValue} onChange={toYearChange} /></div>
-                    </Row>
-                </Row>}
-
-                <button onClick={numOfResults}
-                    className="btn btn-primary"
-                    type="button"
-                    style={{ margin: "10px" }}>
-                    Number of Results
-                </button>
-                {numOfResultsOnClick && <Row className="justify-content-center " >
-                    <Row >
-                        <div className="col-4 center" >Number</div>
-                        <div className="col-8"><Form.Control type="text" value={numOfResultsValue} onChange={numOfResultsChange} /></div>
-                    </Row>
-                </Row>}
-            </div>
+            <Paper variant="outlined" sx={{ marginTop: "10px" }}>
+                <AppBar position="static" sx={{ borderTopRightRadius: "10px", borderTopLeftRadius: "10px" }}>
+                    <Typography variant="h4" sx={{ margin: "10px" }}>Filter Tool</Typography>
+                </AppBar>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        sx={{ justifyContent: "center" }}
+                    >
+                        <Typography>Year</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <Box sx={{ display: "flex", maxWidth: "100px" }}>
+                                <Input placeholder="From" value={fromYearValue}
+                                    onChange={fromYearChange} />
+                            </Box>
+                            <Box sx={{ marginLeft: "10px", marginRight: "10px" }}>
+                                <KeyboardDoubleArrowRightIcon />
+                            </Box>
+                            <Box sx={{ display: "flex", maxWidth: "100px" }}>
+                                <Input placeholder="To" value={toYearValue}
+                                    onChange={toYearChange} />
+                            </Box>
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel2a-content"
+                        id="panel2a-header"
+                    >
+                        <Typography>Number of Results</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <Box sx={{ display: "flex", maxWidth: "200px" }}>
+                                <Input placeholder="Number" value={numOfResultsValue}
+                                    onChange={numOfResultsChange} />
+                            </Box>
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+                {/* <TreeView aria-label="file system navigator"
+                    defaultCollapseIcon={<ExpandMoreIcon />}
+                    defaultExpandIcon={<ChevronRightIcon />}
+                    sx={{ margin: "20px" }}>
+                    <TreeItem label="Year" nodeId="1" sx={{ margin: "10px" }}>
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+                            <Box sx={{ display: "flex", maxWidth: "100px", margin: "10px" }}>
+                                <Input placeholder="From" value={fromYearValue}
+                                    onChange={fromYearChange} />
+                            </Box>
+                            <Box sx={{ margin: "10px" }}>
+                                <KeyboardDoubleArrowRightIcon />
+                            </Box>
+                            <Box sx={{ display: "flex", maxWidth: "100px", margin: "10px" }}>
+                                <Input placeholder="To" value={toYearValue}
+                                    onChange={toYearChange} />
+                            </Box>
+                        </Box>
+                    </TreeItem>
+                    <TreeItem label="Number of Results" nodeId="2" sx={{ margin: "10px" }}>
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+                            <Box sx={{ display: "flex", maxWidth: "200px", margin: "10px" }}>
+                                <Input placeholder="Number" value={numOfResultsValue}
+                                    onChange={numOfResultsChange} />
+                            </Box>
+                        </Box>
+                    </TreeItem>
+                </TreeView> */}
+            </Paper>
         </Container>
     )
 }
