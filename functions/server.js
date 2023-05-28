@@ -1,3 +1,4 @@
+// server.js
 // 需要安裝
 // npm install express
 // npm install http-proxy-middleware
@@ -27,12 +28,17 @@ app.use(
     target: API_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
-      [`^/paper`]: "",
+      "^/paper": "",
     },
   })
 );
 
+// Export the handler function
+exports.handler = app;
+
 // Start Proxy
-app.listen(PORT, HOST, () => {
-  console.log(`Starting Proxy at ${HOST}:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, HOST, () => {
+    console.log(`Starting Proxy at ${HOST}:${PORT}`);
+  });
+}
