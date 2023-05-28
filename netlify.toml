@@ -1,8 +1,8 @@
 [build]
-  command = "npm run build" # Replace with your build command
+  publish="build"
+  command = "CI= npm run build"
 
-[dev]
-  command = "npm run start" # Replace with your start command
-
-[functions]
-  directory = "functions" # Replace with the directory name containing your server.js file
+[[redirects]]
+  from = "/paper/*"
+  to = "https://serpapi.com/:splat"
+  status = 200
