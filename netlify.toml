@@ -1,3 +1,2 @@
 [build]
-  command = "node server.js"
-  publish = "public" # Or the directory where your static files are located
+  functions = "functions"
