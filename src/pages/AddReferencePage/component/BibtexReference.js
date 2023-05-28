@@ -1,5 +1,13 @@
 import * as React from "react";
-import { TextField, Button, IconButton } from "@mui/material";
+import {
+  TextField,
+  Button,
+  IconButton,
+  FormGroup,
+  Checkbox,
+  ButtonGroup,
+} from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { AuthUserContext } from "../../../auth/AuthUserContext";
 
 import {
@@ -12,12 +20,18 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { BackDropContext } from "../../HomePage/component/backDrop/BackDropContext";
 import { SnackBarContext } from "../../../containers/SnackBars/SnackBarContext";
 
+import "./ReferenceFill.css";
+import FillButtonGroup from "./FillButtonGroup";
+
 const BibtexReference = () => {
   var parse = require("bibtex-parser");
 
-  const [bibtex, setBibtex] = React.useState("");
-  const [tags, setTags] = React.useState("");
-  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [formState, setFormState] = React.useState({
+    bibtex: "",
+    tags: "",
+    selectedFile: null,
+  });
+
   const [isValidBibTeX, setIsValidBibTeX] = React.useState(true);
 
   const { authUser } = React.useContext(AuthUserContext);
@@ -35,18 +49,28 @@ const BibtexReference = () => {
 
   // form
   const clearFill = () => {
-    setBibtex("");
-    setSelectedFile(null);
+    setFormState({
+      bibtex: "",
+      tags: "",
+      selectedFile: null,
+    });
   };
 
   const submitRef = (e) => {
+    if (!isValidBibTeX) {
+      setSnackMessage("Invalid BibTeX entry");
+      setOpenSnack(true);
+      return;
+    }
+
     e.preventDefault();
-    const bibtexParse = parse(bibtex);
+    const bibtexParse = parse(formState.bibtex);
 
     const entryKey = Object.keys(bibtexParse)[0];
     const entry = bibtexParse[entryKey];
 
-    console.log(entry.AUTHOR);
+    const { selectedFile, tags } = formState;
+
     const ref = {
       author: entry.AUTHOR ? entry.AUTHOR : "-",
       title: entry.TITLE ? entry.TITLE : "-",
@@ -64,92 +88,118 @@ const BibtexReference = () => {
     setSnackMessage("Reference added successfully");
     setOpenSnack(true);
     setOpenAdd(false);
-
     clearFill();
   };
 
   return (
-    <form autoComplete="off" onSubmit={submitRef}>
-      <TextField
-        disabled={authUser == null}
-        label="Bibtex"
-        onChange={(e) => {
-          const value = e.target.value;
-          setBibtex(value);
+    <div>
+      <form autoComplete="off" onSubmit={submitRef}>
+        <div className="formBox">
+          <div>
+            <TextField
+              disabled={authUser == null}
+              label="Bibtex"
+              placeholder="Paste valid BibTeX entry here"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormState((prevState) => ({
+                  ...prevState,
+                  bibtex: value,
+                }));
 
-          // Check if the input value is a valid BibTeX entry
-          const isValid = isBibTeXEntry(value);
-          setIsValidBibTeX(isValid);
-        }}
-        required
-        variant="outlined"
-        color="primary"
-        type="text"
-        value={bibtex}
-        fullWidth
-        multiline
-        rows={15}
-        sx={{
-          mb: 2,
-        }}
-      />
-      <TextField
-        disabled={authUser == null}
-        label="tags"
-        onChange={(e) => setTags(e.target.value)}
-        required
-        variant="outlined"
-        color="primary"
-        type="text"
-        value={tags}
-        fullWidth
-        sx={{
-          mb: 2,
-        }}
-      />
-      <Button fullWidth sx={{ mb: 2 }} variant="outlined">
-        <label className="custom-file-upload">
-          Upload PDF (not necessary)
-          <input
-            type="file"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-          />
-        </label>
-      </Button>
-      {selectedFile && (
-        <div style={{ marginBottom: "4px" }}>
-          <span style={{ color: "black" }}>{selectedFile.name}</span>
-          <IconButton onClick={() => setSelectedFile(null)}>
-            <ClearIcon />
-          </IconButton>
+                // Check if the input value is a valid BibTeX entry
+                const isValid = isBibTeXEntry(value);
+                setIsValidBibTeX(isValid);
+              }}
+              required
+              variant="outlined"
+              color="primary"
+              type="text"
+              value={formState.bibtex}
+              fullWidth
+              multiline
+              rows={15}
+              sx={{
+                mb: 2,
+              }}
+            />
+            <TextField
+              disabled={authUser == null}
+              label="tags"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormState((prevState) => ({
+                  ...prevState,
+                  tags: value,
+                }));
+              }}
+              required
+              variant="outlined"
+              color="primary"
+              type="text"
+              value={formState.tags}
+              fullWidth
+              sx={{
+                mb: 2,
+              }}
+            />
+            <Button fullWidth sx={{ mb: 2 }} variant="outlined">
+              <label className="custom-file-upload">
+                Upload PDF (not necessary)
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    const value = e.target.files[0];
+                    setFormState((prevState) => ({
+                      ...prevState,
+                      selectedFile: value,
+                    }));
+                  }}
+                />
+              </label>
+            </Button>
+            {formState.selectedFile && (
+              <div style={{ marginBottom: "4px" }}>
+                <span style={{ color: "black" }}>
+                  {formState.selectedFile.name}
+                </span>
+                <IconButton
+                  onClick={() => {
+                    setFormState((prevState) => ({
+                      ...prevState,
+                      selectedFile: null,
+                    }));
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </div>
+            )}
+          </div>
+          <div>
+            <h2>Category</h2>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox defaultChecked />}
+                label="Label"
+              />
+              <FormControlLabel
+                required
+                control={<Checkbox />}
+                label="Required"
+              />
+              <FormControlLabel
+                disabled
+                control={<Checkbox />}
+                label="Disabled"
+              />
+            </FormGroup>
+          </div>
         </div>
-      )}
 
-      <Button
-        disabled={authUser == null || !isValidBibTeX}
-        type="submit"
-        variant="contained"
-        fullWidth
-        sx={{
-          mb: 2,
-        }}
-      >
-        Submit
-      </Button>
-
-      <Button
-        disabled={authUser == null}
-        variant="outlined"
-        color="error"
-        fullWidth
-        onClick={clearFill}
-        sx={{
-          mb: 2,
-        }}
-      >
-        Reset
-      </Button>
-    </form>
+        <FillButtonGroup clearFill={clearFill} isValid={isValidBibTeX} />
+      </form>
+    </div>
   );
 };
 

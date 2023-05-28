@@ -13,7 +13,7 @@ const SnackBarCustom = () => {
   return (
     <Snackbar
       open={openSnack}
-      autoHideDuration={2000}
+      autoHideDuration={1000}
       onClose={handleSnackClose}
     >
       <Alert

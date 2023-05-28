@@ -21,7 +21,7 @@ const AddReferencePage = () => {
   return (
     <div className="AddReferencePage">
       <h2 style={{ textAlign: "start" }}>Add Reference</h2>
-      <div style={{ width: "40vw" }}>
+      <div style={{ width: "80vw" }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -30,11 +30,9 @@ const AddReferencePage = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <h3 style={{ textAlign: "start" }}>Plain Text</h3>
             <ManualReferenceFill />
           </TabPanel>
           <TabPanel value="2">
-            <h3 style={{ textAlign: "start" }}>Bibtex</h3>
             <BibtexReference />
           </TabPanel>
         </TabContext>

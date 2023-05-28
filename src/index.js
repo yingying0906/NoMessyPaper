@@ -9,17 +9,20 @@ import SnackBarProvider from "./containers/SnackBars/SnackBarContext";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
+import { ReferenceProvider } from "./database/ReferenceContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthUserProvider>
-        <SnackBarProvider>
-          <BackDropProvider>
-            <App />
-          </BackDropProvider>
-        </SnackBarProvider>
+        <ReferenceProvider>
+          <SnackBarProvider>
+            <BackDropProvider>
+              <App />
+            </BackDropProvider>
+          </SnackBarProvider>
+        </ReferenceProvider>
       </AuthUserProvider>
     </BrowserRouter>
   </React.StrictMode>
