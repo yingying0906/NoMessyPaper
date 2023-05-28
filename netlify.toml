@@ -1,8 +1,16 @@
 [build]
-  publish="build"
-  command = "CI= npm run build"
+  command = "npm install && npm run build"
+  publish = "build"
 
 [[redirects]]
-  from = "/paper/*"
-  to = "https://serpapi.com/:splat"
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
   status = 200
+
+[[headers]]
+  for = "/*.js"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
+  for = "/*.json"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
