@@ -5,10 +5,14 @@ import React, { useEffect, useState } from "react";
 
 import FetchPaperFromGoogleScholar from "./FetchPaperFromGoogleScholar";
 import ControlPanel from "./ControlPanel";
-import { Button, Container, TextField } from "@mui/material";
-import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
+import { Alert, Button, Container, TextField } from "@mui/material";
+import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { LoadingButton } from "@mui/lab";
+
+import { Link } from "react-router-dom";
+import { AuthUserContext } from "../../auth/AuthUserContext";
+import serpapi_logo from "../../assets/serpapi_logo.png";
 
 // 開兩個terminal
 // 一個terminal 需要先單獨運行server.js =>  node server.js
@@ -29,6 +33,8 @@ const SearchPage = () => {
   const [numOfResults, setNumOfResults] = useState("10");
   const [searchNumOfResults, setSearchNumOfResults] = useState("10");
 
+  const { apiKey } = React.useContext(AuthUserContext);
+
   useEffect(() => {
     const savedText = sessionStorage.getItem("keywords");
     if (savedText) {
@@ -36,18 +42,6 @@ const SearchPage = () => {
       setKeywords(savedText);
     }
   }, []);
-
-  function goHome() {
-    setText("");
-    setKeywords("");
-    setFromYear("");
-    setToYear("");
-    setNumOfResults("10");
-    sessionStorage.setItem("keywords", "");
-    sessionStorage.setItem("fromYear", "");
-    sessionStorage.setItem("toYear", "");
-    sessionStorage.setItem("numOfResults", "");
-  }
 
   function inputChange(e) {
     setText(e.target.value);
@@ -65,15 +59,30 @@ const SearchPage = () => {
       sessionStorage.setItem("fromYear", fromYear);
       sessionStorage.setItem("toYear", toYear);
       sessionStorage.setItem("numOfResults", numOfResults);
-
     }
   }
 
   return (
-    <Container fixed>
-      <Grid2 container spacing={3} sx={{ marginTop: "10px", marginBottom: "5px" }}>
+    <Container fixed style={{ padding: "2vw" }}>
+      {apiKey === "" && (
+        <Alert severity="error">
+          You need to provide your SerpApi API key in the{" "}
+          <Link to="/Account">Account Page</Link>
+        </Alert>
+      )}
+
+      <Grid2 container spacing={3} sx={{ marginBottom: "5px" }}>
         <Grid2 xs={3} sx={{ justifyContent: "center", alignSelf: "center" }}>
-          <Button variant='text' onClick={goHome}>Search Page</Button>
+          <Button style={{ fontSize: "0.8em" }}>
+            Search features powered by{" "}
+            <a
+              href="https://serpapi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img style={{ height: "40px" }} src={serpapi_logo} alt="logo" />
+            </a>
+          </Button>
         </Grid2>
         <Grid2 xs={7} sx={{ justifyContent: "center", alignSelf: "center" }}>
           <TextField
@@ -86,12 +95,13 @@ const SearchPage = () => {
         </Grid2>
         <Grid2 xs={2} sx={{ justifyContent: "center", alignSelf: "center" }}>
           <LoadingButton
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             onClick={startSearch}
             loading={loading}
             loadingPosition="start"
-            startIcon={<FindInPageOutlinedIcon />}>
+            startIcon={<FindInPageOutlinedIcon />}
+          >
             Search
           </LoadingButton>
         </Grid2>
@@ -102,7 +112,7 @@ const SearchPage = () => {
         </div>
       )}
       {keywords && (
-        <Grid2 container justifyContent="center">
+        <Grid2 container justifyContent="center" style={{ marginTop: "20px" }}>
           <Grid2 xs>
             <ControlPanel
               setFromYear={setFromYear}

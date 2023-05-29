@@ -47,11 +47,13 @@ const UserSetting = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem key="logout" onClick={handleCloseUserMenu}>
-          <Link to="/Account">
-            <Button>Account</Button>
-          </Link>
-        </MenuItem>
+        {authUser && (
+          <MenuItem key="logout" onClick={handleCloseUserMenu}>
+            <Link to="/Account">
+              <Button>Account</Button>
+            </Link>
+          </MenuItem>
+        )}
 
         <MenuItem key="account" onClick={handleCloseUserMenu}>
           {authUser ? (

@@ -5,3 +5,15 @@
   justify-content: center;
   padding: 20px;
 }
+
+.apiKeyInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.apiKeyInput input {
+  display: inline-block;
+  position: relative;
+  padding: 10px;
+}

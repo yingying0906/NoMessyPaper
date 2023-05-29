@@ -1,14 +1,16 @@
 import * as React from "react";
 
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { ref, get } from "firebase/database";
 
 export const AuthUserContext = React.createContext();
 
 const AuthUserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [authUser, setAuthUser] = React.useState(null);
+  const [apiKey, setApiKey] = React.useState("");
 
   // change user once auth state changes
   React.useEffect(() => {
@@ -24,6 +26,25 @@ const AuthUserProvider = ({ children }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (authUser) {
+      const uid = authUser.uid;
+      const reference = ref(db, `/api-key/${uid}`);
+
+      get(reference)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setApiKey(snapshot.val());
+            console.log("API key retrieved");
+          } else {
+          }
+        })
+        .catch((error) => {
+          console.error("Error retrieving API key:", error);
+        });
+    }
+  }, [authUser, setAuthUser]);
+
   // signout
   const userSignOut = () => {
     signOut(auth)
@@ -38,6 +59,8 @@ const AuthUserProvider = ({ children }) => {
   const contextValue = {
     authUser,
     userSignOut,
+    apiKey,
+    setApiKey,
   };
   return (
     <AuthUserContext.Provider value={contextValue}>
