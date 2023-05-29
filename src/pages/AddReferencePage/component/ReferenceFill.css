@@ -16,3 +16,21 @@
 .formBox > div:first-child {
   border-right: 1px solid #ccc;
 }
+
+.newCategory {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin: 5% 0%;
+}
+
+.newCategory input {
+  display: inline-block;
+  margin: 0;
+}
+
+.newCategory div {
+  margin: 0;
+}

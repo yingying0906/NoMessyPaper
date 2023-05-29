@@ -32,13 +32,13 @@ const editReference = (UID, RefId, Item) => {
 const deleteReference = async (UID, RefId, RefFileName) => {
   const reference = ref(db, `referenceList/${UID}/${RefId}`);
 
-  const storageRef = sRef(
-    storage,
-    `referenceList/${UID}/${RefId}/${RefFileName}`
-  );
-
   // delete pdf
-  if (RefFileName !== null) {
+  if (RefFileName !== undefined) {
+    const storageRef = sRef(
+      storage,
+      `referenceList/${UID}/${RefId}/${RefFileName}`
+    );
+
     await deleteObject(storageRef)
       .then(() => {
         console.log("pdf removed");

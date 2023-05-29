@@ -14,7 +14,7 @@ const typographyData = [
     isAuthRequired: false,
   },
   {
-    text: "Add Multiple",
+    text: "Add Reference",
     href: "/Add",
     isVisible: { xs: "none", md: "flex" },
     extraStyles: { mr: 2 },

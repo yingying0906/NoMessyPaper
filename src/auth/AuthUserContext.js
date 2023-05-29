@@ -29,9 +29,9 @@ const AuthUserProvider = ({ children }) => {
   React.useEffect(() => {
     if (authUser) {
       const uid = authUser.uid;
-      const reference = ref(db, `/api-key/${uid}`);
+      const apiRef = ref(db, `/api-key/${uid}`);
 
-      get(reference)
+      get(apiRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
             setApiKey(snapshot.val());

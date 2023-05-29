@@ -1,7 +1,10 @@
 import * as React from "react";
 import { AuthUserContext } from "../../../../../auth/AuthUserContext";
 import { BackDropContext } from "../BackDropContext";
-import { editReference } from "../../../../../database/controlDatabase";
+import {
+  editReference,
+  writeNewFile,
+} from "../../../../../database/controlDatabase";
 
 import { TextField, Button, IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -37,8 +40,15 @@ const EditReferenceForm = () => {
       year: year,
       journal: journal,
       tags: tags,
+      fileName: selectedFile ? selectedFile.name : null,
     };
     editReference(authUser.uid, editingFile.id, ref);
+
+    if (selectedFile) {
+      writeNewFile(authUser.uid, editingFile.id, selectedFile);
+    }
+
+    setSelectedFile(null);
   };
 
   return (
@@ -114,15 +124,24 @@ const EditReferenceForm = () => {
             mb: 2,
           }}
         />
-        <Button fullWidth sx={{ mb: 2 }} variant="outlined">
-          <label className="custom-file-upload">
-            Upload PDF (not necessary)
-            <input
-              type="file"
-              onChange={(e) => setSelectedFile(e.target.files[0])}
-            />
-          </label>
-        </Button>
+
+        {editingFile.fileName ? (
+          <div style={{ color: "black" }}>
+            {editingFile && editingFile.fileName}
+            <IconButton></IconButton>
+          </div>
+        ) : (
+          <Button fullWidth sx={{ mb: 2 }} variant="outlined">
+            <label className="custom-file-upload">
+              Upload PDF (not necessary)
+              <input
+                type="file"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              />
+            </label>
+          </Button>
+        )}
+
         {selectedFile && (
           <div style={{ marginBottom: "4px" }}>
             <span style={{ color: "black" }}>{selectedFile.name}</span>

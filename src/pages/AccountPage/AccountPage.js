@@ -1,4 +1,4 @@
-import { TextField, Button, IconButton, Icon } from "@mui/material";
+import { TextField, IconButton, Tooltip, Alert } from "@mui/material";
 import { auth, db } from "../../firebase";
 import { ref, set } from "firebase/database";
 
@@ -6,7 +6,7 @@ import * as React from "react";
 import { AuthUserContext } from "../../auth/AuthUserContext";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import "./AccountPage.css";
 
 const AccountPage = () => {
@@ -14,17 +14,19 @@ const AccountPage = () => {
 
   const [apiKeyInput, setApiKeyInput] = React.useState("");
 
-  React.useEffect(() => {
-    setApiKeyInput(apiKey);
-  }, [apiKey]);
-
   const [apiKeyEdit, setApiKeyEdit] = React.useState(false);
 
   const { authUser } = React.useContext(AuthUserContext);
 
+  React.useEffect(() => {
+    setApiKeyInput(apiKey);
+  }, [apiKey]);
+
   const handleApiKeyChange = (event) => {
     setApiKeyInput(event.target.value);
   };
+
+  const [apiTipsOpen, setApiTipsOpen] = React.useState(false);
 
   const saveApiKey = () => {
     const user = auth.currentUser;
@@ -47,8 +49,8 @@ const AccountPage = () => {
 
   return (
     <div>
-      <h2>Account Page</h2>
       <div className="accountPageContainer">
+        <h2>Account Page</h2>
         <div
           style={{
             width: "50%",
@@ -56,13 +58,35 @@ const AccountPage = () => {
             flexDirection: "column",
             justifyContent: "flex-start",
             textAlign: "start",
+            margin: "20px",
           }}
         >
           <>
-            <p style={{ margin: "0" }}>
-              To enable search results, you need to provide your SerpApi API
-              key.
-            </p>
+            <h5 ls style={{ fontWeight: "bold" }}>
+              Your SerpApi API Key{" "}
+              <IconButton
+                style={{ padding: "0" }}
+                onClick={() => {
+                  setApiTipsOpen(!apiTipsOpen);
+                }}
+              >
+                <HelpOutlineIcon sx={{ fontSize: "1.2rem" }} />
+              </IconButton>
+            </h5>
+            {apiTipsOpen && (
+              <Alert severity="info" style={{ borderRadius: "10px" }}>
+                To enable search results, you need to provide your SerpApi API
+                key. If you do not have an API key, you can get one from{" "}
+                <a
+                  href="https://serpapi.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  SerpApi
+                </a>{" "}
+                for free.
+              </Alert>
+            )}
 
             <div className="apiKeyInput">
               <TextField
@@ -74,26 +98,28 @@ const AccountPage = () => {
                 margin="normal"
               />
               {apiKeyEdit ? (
-                <IconButton
-                  onClick={() => {
-                    saveApiKey();
-                    setApiKeyEdit(false);
-                  }}
-                >
-                  <SaveIcon />
-                </IconButton>
+                <Tooltip title="Save">
+                  <IconButton
+                    onClick={() => {
+                      saveApiKey();
+                      setApiKeyEdit(false);
+                    }}
+                  >
+                    <SaveIcon />
+                  </IconButton>
+                </Tooltip>
               ) : (
-                <IconButton
-                  onClick={() => {
-                    setApiKeyEdit(true);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
+                <Tooltip title="Edit">
+                  <IconButton
+                    onClick={() => {
+                      setApiKeyEdit(true);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
               )}
             </div>
-
-            <div></div>
           </>
         </div>
       </div>

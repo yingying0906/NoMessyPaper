@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Chip, IconButton } from "@mui/material";
+import { Chip, IconButton, Tooltip } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -46,22 +46,30 @@ const columns = [
       return (
         <div>
           {params.row.fileName && (
-            <IconButton
-              onClick={() =>
-                downloadFile(params.UID, params.row.id, params.row.fileName)
-              }
-            >
-              <OpenInNewIcon />
-            </IconButton>
+            <Tooltip title="Open File in New Tab">
+              <IconButton
+                onClick={() =>
+                  downloadFile(params.UID, params.row.id, params.row.fileName)
+                }
+              >
+                <OpenInNewIcon />
+              </IconButton>
+            </Tooltip>
           )}
 
-          <IconButton
-            onClick={() => {
-              params.handleEdit(params.UID, params.row.id, params.row.fileName);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
+          <Tooltip title="Edit">
+            <IconButton
+              onClick={() => {
+                params.handleEdit(
+                  params.UID,
+                  params.row.id,
+                  params.row.fileName
+                );
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
 
           {/*<IconButton
             onClick={() =>

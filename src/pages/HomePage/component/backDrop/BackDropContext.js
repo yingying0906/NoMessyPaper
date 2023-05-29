@@ -8,7 +8,6 @@ const BackDropProvider = ({ children }) => {
 
   const [editingFile, setEditingFile] = React.useState("");
   const [editingFileRef, setEditingFileRef] = React.useState(null);
-  const [references, setReferences] = React.useState([]);
 
   // return context
   const contextValue = {
@@ -18,8 +17,6 @@ const BackDropProvider = ({ children }) => {
     setOpenAdd,
     editingFile,
     setEditingFile,
-    references,
-    setReferences,
     editingFileRef,
     setEditingFileRef,
   };

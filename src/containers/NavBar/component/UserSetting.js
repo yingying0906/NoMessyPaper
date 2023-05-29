@@ -28,7 +28,15 @@ const UserSetting = () => {
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <AccountCircleIcon fontSize="large" style={{ color: "white" }} />
+          {authUser && authUser.photoURL ? (
+            <img
+              src={authUser.photoURL}
+              alt="user"
+              style={{ height: "35px", borderRadius: "50%" }}
+            />
+          ) : (
+            <AccountCircleIcon fontSize="large" style={{ color: "white" }} />
+          )}
         </IconButton>
       </Tooltip>
       <Menu

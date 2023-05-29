@@ -6,14 +6,16 @@ import { columns } from "./component/ReferenceTableInfo";
 import { DataGrid } from "@mui/x-data-grid";
 import { AuthUserContext } from "../../auth/AuthUserContext";
 import { BackDropContext } from "./component/backDrop/BackDropContext";
+import { ReferenceContext } from "../../database/ReferenceContext";
 import { RefTableToolBar } from "./component/ReferenceTableToolBar";
 
 const ReferenceTable = (props) => {
   const { authUser } = React.useContext(AuthUserContext);
   const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
 
-  const { setOpenEdit, setEditingFile, references } =
-    React.useContext(BackDropContext);
+  const { setOpenEdit, setEditingFile } = React.useContext(BackDropContext);
+
+  const { references } = React.useContext(ReferenceContext);
 
   const handleEdit = (UID, RefId, RefFileName) => {
     setOpenEdit(true);
@@ -32,12 +34,7 @@ const ReferenceTable = (props) => {
             handleEdit: handleEdit,
           }),
       };
-    }
-    if (
-      column.field === "title" ||
-      column.field === "author" ||
-      column.field === "journal"
-    ) {
+    } else {
       return {
         ...column,
         renderCell: (params) => (
@@ -49,7 +46,6 @@ const ReferenceTable = (props) => {
         ),
       };
     }
-    return column;
   });
 
   // table

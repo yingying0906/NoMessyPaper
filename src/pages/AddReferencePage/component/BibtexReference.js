@@ -1,26 +1,29 @@
 import * as React from "react";
+import "./ReferenceFill.css";
+
 import {
   TextField,
   Button,
   IconButton,
   FormGroup,
   Checkbox,
-  ButtonGroup,
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { AuthUserContext } from "../../../auth/AuthUserContext";
 
 import {
   writeNewReference,
   writeNewFile,
 } from "../../../database/controlDatabase";
 
-import ClearIcon from "@mui/icons-material/Clear";
-
+import { AuthUserContext } from "../../../auth/AuthUserContext";
 import { BackDropContext } from "../../HomePage/component/backDrop/BackDropContext";
 import { SnackBarContext } from "../../../containers/SnackBars/SnackBarContext";
+import { ReferenceContext } from "../../../database/ReferenceContext";
 
-import "./ReferenceFill.css";
+import AddIcon from "@mui/icons-material/Add";
+import DoneIcon from "@mui/icons-material/Done";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import FillButtonGroup from "./FillButtonGroup";
 
 const BibtexReference = () => {
@@ -39,6 +42,11 @@ const BibtexReference = () => {
   const { setOpenAdd } = React.useContext(BackDropContext);
   const { setOpenSnack, setSnackMessage } = React.useContext(SnackBarContext);
 
+  const [openNewCategory, setOpenNewCategory] = React.useState(false);
+  const { categories, setCategories, writeCategoriesDb, loading } =
+    React.useContext(ReferenceContext);
+  const [newCategory, setNewCategory] = React.useState("");
+
   // check bibtex
   const isBibTeXEntry = (text) => {
     // Regular expression pattern to match BibTeX entry
@@ -54,6 +62,11 @@ const BibtexReference = () => {
       tags: "",
       selectedFile: null,
     });
+    setCategories(
+      categories.map((cat) => {
+        return { ...cat, checked: false };
+      })
+    );
   };
 
   const submitRef = (e) => {
@@ -71,6 +84,10 @@ const BibtexReference = () => {
 
     const { selectedFile, tags } = formState;
 
+    const writeCategories = categories
+      .filter((cat) => cat.checked)
+      .map((cat) => cat.name);
+
     const ref = {
       author: entry.AUTHOR ? entry.AUTHOR : "-",
       title: entry.TITLE ? entry.TITLE : "-",
@@ -78,6 +95,7 @@ const BibtexReference = () => {
       journal: entry.JOURNAL ? entry.JOURNAL : "-",
       tags: tags,
       fileName: selectedFile ? selectedFile.name : null,
+      categories: writeCategories,
     };
     const referenceId = writeNewReference(authUser.uid, ref);
 
@@ -89,6 +107,24 @@ const BibtexReference = () => {
     setOpenSnack(true);
     setOpenAdd(false);
     clearFill();
+  };
+
+  const handleCategoryChange = (index) => {
+    setCategories((prevCategories) => {
+      const updatedCategories = [...prevCategories];
+      updatedCategories[index] = {
+        ...updatedCategories[index],
+        checked: !updatedCategories[index].checked,
+      };
+      return updatedCategories;
+    });
+  };
+
+  const addCategory = (catName) => {
+    setCategories((prevCategories) => [
+      ...prevCategories,
+      { name: `${catName}`, checked: false },
+    ]);
   };
 
   return (
@@ -179,21 +215,52 @@ const BibtexReference = () => {
           <div>
             <h2>Category</h2>
             <FormGroup>
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Label"
-              />
-              <FormControlLabel
-                required
-                control={<Checkbox />}
-                label="Required"
-              />
-              <FormControlLabel
-                disabled
-                control={<Checkbox />}
-                label="Disabled"
-              />
+              {categories.map((category, index) => (
+                <FormControlLabel
+                  key={index}
+                  control={
+                    <Checkbox
+                      checked={category.checked}
+                      onChange={() => handleCategoryChange(index)}
+                      name={category.name}
+                    />
+                  }
+                  label={category.name}
+                />
+              ))}
             </FormGroup>
+
+            {openNewCategory ? (
+              <div className="newCategory">
+                <TextField
+                  size="small"
+                  label="Category Name"
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  required
+                  variant="outlined"
+                  color="primary"
+                  type="text"
+                  sx={{
+                    mb: 2,
+                  }}
+                  fullWidth
+                  value={newCategory}
+                />
+                <IconButton
+                  onClick={() => {
+                    addCategory(newCategory);
+                    setOpenNewCategory(false);
+                    writeCategoriesDb(authUser.uid, newCategory);
+                  }}
+                >
+                  <DoneIcon />
+                </IconButton>
+              </div>
+            ) : (
+              <IconButton onClick={() => setOpenNewCategory(true)}>
+                <AddIcon />
+              </IconButton>
+            )}
           </div>
         </div>
 
