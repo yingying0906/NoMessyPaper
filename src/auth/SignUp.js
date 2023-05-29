@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { AuthUserContext } from "../auth/AuthUserContext";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const { authUser } = React.useContext(AuthUserContext);
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const navigate = useNavigate();
 
   const signUp = (e) => {
     e.preventDefault();

@@ -1,14 +1,7 @@
 import * as React from "react";
 import "./ReferenceFill.css";
 
-import {
-  TextField,
-  Button,
-  IconButton,
-  FormGroup,
-  Checkbox,
-} from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { TextField, Button, IconButton } from "@mui/material";
 
 import {
   writeNewReference,
@@ -20,11 +13,10 @@ import { BackDropContext } from "../../HomePage/component/backDrop/BackDropConte
 import { SnackBarContext } from "../../../containers/SnackBars/SnackBarContext";
 import { ReferenceContext } from "../../../database/ReferenceContext";
 
-import AddIcon from "@mui/icons-material/Add";
-import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import FillButtonGroup from "./FillButtonGroup";
+import CategoryChoose from "./CategoryChoose";
 
 const BibtexReference = () => {
   var parse = require("bibtex-parser");
@@ -42,10 +34,7 @@ const BibtexReference = () => {
   const { setOpenAdd } = React.useContext(BackDropContext);
   const { setOpenSnack, setSnackMessage } = React.useContext(SnackBarContext);
 
-  const [openNewCategory, setOpenNewCategory] = React.useState(false);
-  const { categories, setCategories, writeCategoriesDb, loading } =
-    React.useContext(ReferenceContext);
-  const [newCategory, setNewCategory] = React.useState("");
+  const { categories, setCategories } = React.useContext(ReferenceContext);
 
   // check bibtex
   const isBibTeXEntry = (text) => {
@@ -86,7 +75,7 @@ const BibtexReference = () => {
 
     const writeCategories = categories
       .filter((cat) => cat.checked)
-      .map((cat) => cat.name);
+      .map((cat) => cat.refID);
 
     const ref = {
       author: entry.AUTHOR ? entry.AUTHOR : "-",
@@ -107,24 +96,6 @@ const BibtexReference = () => {
     setOpenSnack(true);
     setOpenAdd(false);
     clearFill();
-  };
-
-  const handleCategoryChange = (index) => {
-    setCategories((prevCategories) => {
-      const updatedCategories = [...prevCategories];
-      updatedCategories[index] = {
-        ...updatedCategories[index],
-        checked: !updatedCategories[index].checked,
-      };
-      return updatedCategories;
-    });
-  };
-
-  const addCategory = (catName) => {
-    setCategories((prevCategories) => [
-      ...prevCategories,
-      { name: `${catName}`, checked: false },
-    ]);
   };
 
   return (
@@ -214,53 +185,7 @@ const BibtexReference = () => {
           </div>
           <div>
             <h2>Category</h2>
-            <FormGroup>
-              {categories.map((category, index) => (
-                <FormControlLabel
-                  key={index}
-                  control={
-                    <Checkbox
-                      checked={category.checked}
-                      onChange={() => handleCategoryChange(index)}
-                      name={category.name}
-                    />
-                  }
-                  label={category.name}
-                />
-              ))}
-            </FormGroup>
-
-            {openNewCategory ? (
-              <div className="newCategory">
-                <TextField
-                  size="small"
-                  label="Category Name"
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  required
-                  variant="outlined"
-                  color="primary"
-                  type="text"
-                  sx={{
-                    mb: 2,
-                  }}
-                  fullWidth
-                  value={newCategory}
-                />
-                <IconButton
-                  onClick={() => {
-                    addCategory(newCategory);
-                    setOpenNewCategory(false);
-                    writeCategoriesDb(authUser.uid, newCategory);
-                  }}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </div>
-            ) : (
-              <IconButton onClick={() => setOpenNewCategory(true)}>
-                <AddIcon />
-              </IconButton>
-            )}
+            <CategoryChoose />
           </div>
         </div>
 

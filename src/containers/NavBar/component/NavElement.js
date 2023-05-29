@@ -1,7 +1,10 @@
 import * as React from "react";
-import { Typography } from "@mui/material";
-import { AuthUserContext } from "../../../auth/AuthUserContext";
+
 import { Link } from "react-router-dom";
+
+import { Typography } from "@mui/material";
+
+import { AuthUserContext } from "../../../auth/AuthUserContext";
 
 import logo_2 from "../../../assets/logo_2.png";
 

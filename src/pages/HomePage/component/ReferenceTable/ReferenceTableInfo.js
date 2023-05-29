@@ -4,7 +4,7 @@ import { Chip, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { downloadFile } from "../../../database/controlDatabase";
+import { downloadFile } from "../../../../database/controlDatabase";
 
 const columns = [
   { field: "fakeId", headerName: "ID", sortable: false, flex: 1 },

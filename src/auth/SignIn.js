@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
-import { Google } from "@mui/icons-material";
-import LoginIcon from "@mui/icons-material/Login";
-import { TextField, Button } from "@mui/material";
-
 import { AuthUserContext } from "../auth/AuthUserContext";
+
+import { Google } from "@mui/icons-material";
+import { TextField, Button } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
 
 const SignIn = () => {
   const navigate = useNavigate();

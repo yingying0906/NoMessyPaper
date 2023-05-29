@@ -1,13 +1,6 @@
 import * as React from "react";
 
-import {
-  TextField,
-  Button,
-  IconButton,
-  FormGroup,
-  Checkbox,
-} from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { TextField, Button, IconButton } from "@mui/material";
 
 import FillButtonGroup from "./FillButtonGroup";
 import {
@@ -20,11 +13,11 @@ import { BackDropContext } from "../../HomePage/component/backDrop/BackDropConte
 import { SnackBarContext } from "../../../containers/SnackBars/SnackBarContext";
 import { ReferenceContext } from "../../../database/ReferenceContext";
 
-import AddIcon from "@mui/icons-material/Add";
-import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import "./ReferenceFill.css";
+import CategoryChoose from "./CategoryChoose";
+
 const infoFields = [
   {
     label: "Author",
@@ -72,10 +65,7 @@ const ManualReferenceFill = () => {
   const { setOpenAdd } = React.useContext(BackDropContext);
   const { setOpenSnack, setSnackMessage } = React.useContext(SnackBarContext);
 
-  const { categories, setCategories, writeCategoriesDb, loading } =
-    React.useContext(ReferenceContext);
-  const [newCategory, setNewCategory] = React.useState("");
-  const [openNewCategory, setOpenNewCategory] = React.useState(false);
+  const { categories, setCategories } = React.useContext(ReferenceContext);
 
   const clearFill = () => {
     setFormState({
@@ -99,7 +89,9 @@ const ManualReferenceFill = () => {
 
     const writeCategories = categories
       .filter((cat) => cat.checked)
-      .map((cat) => cat.name);
+      .map((cat) => cat.refID);
+
+    console.log("hi", writeCategories);
 
     const ref = {
       author,
@@ -126,24 +118,6 @@ const ManualReferenceFill = () => {
       ...prevState,
       [stateKey]: e.target.value,
     }));
-  };
-
-  const handleCategoryChange = (index) => {
-    setCategories((prevCategories) => {
-      const updatedCategories = [...prevCategories];
-      updatedCategories[index] = {
-        ...updatedCategories[index],
-        checked: !updatedCategories[index].checked,
-      };
-      return updatedCategories;
-    });
-  };
-
-  const addCategory = (catName) => {
-    setCategories((prevCategories) => [
-      ...prevCategories,
-      { name: `${catName}`, checked: false },
-    ]);
   };
 
   return (
@@ -205,53 +179,7 @@ const ManualReferenceFill = () => {
           </div>
           <div>
             <h2>Category</h2>
-            <FormGroup>
-              {categories.map((category, index) => (
-                <FormControlLabel
-                  key={index}
-                  control={
-                    <Checkbox
-                      checked={category.checked}
-                      onChange={() => handleCategoryChange(index)}
-                      name={category.name}
-                    />
-                  }
-                  label={category.name}
-                />
-              ))}
-            </FormGroup>
-
-            {openNewCategory ? (
-              <div className="newCategory">
-                <TextField
-                  size="small"
-                  label="Category Name"
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  required
-                  variant="outlined"
-                  color="primary"
-                  type="text"
-                  sx={{
-                    mb: 2,
-                  }}
-                  fullWidth
-                  value={newCategory}
-                />
-                <IconButton
-                  onClick={() => {
-                    addCategory(newCategory);
-                    setOpenNewCategory(false);
-                    writeCategoriesDb(authUser.uid, newCategory);
-                  }}
-                >
-                  <DoneIcon />
-                </IconButton>
-              </div>
-            ) : (
-              <IconButton onClick={() => setOpenNewCategory(true)}>
-                <AddIcon />
-              </IconButton>
-            )}
+            <CategoryChoose />
           </div>
         </div>
 

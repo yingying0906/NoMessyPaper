@@ -2,12 +2,12 @@ import * as React from "react";
 import "./ReferenceTable.css";
 import Tooltip from "@mui/material/Tooltip";
 
-import { columns } from "./component/ReferenceTableInfo";
+import { columns } from "./ReferenceTableInfo";
 import { DataGrid } from "@mui/x-data-grid";
-import { AuthUserContext } from "../../auth/AuthUserContext";
-import { BackDropContext } from "./component/backDrop/BackDropContext";
-import { ReferenceContext } from "../../database/ReferenceContext";
-import { RefTableToolBar } from "./component/ReferenceTableToolBar";
+import { AuthUserContext } from "../../../../auth/AuthUserContext";
+import { BackDropContext } from "../backDrop/BackDropContext";
+import { ReferenceContext } from "../../../../database/ReferenceContext";
+import { RefTableToolBar } from "./ReferenceTableToolBar";
 
 const ReferenceTable = (props) => {
   const { authUser } = React.useContext(AuthUserContext);
@@ -64,7 +64,15 @@ const ReferenceTable = (props) => {
         autoHeight
         resizable
         className="ReferenceTable"
-        rows={props.references}
+        rows={
+          props.page === "all"
+            ? props.references
+            : props.references.filter(
+                (ref) =>
+                  Array.isArray(ref.categories) &&
+                  ref.categories?.includes(props.page.toString())
+              )
+        }
         columns={columnsWithUID}
         initialState={{
           pagination: {

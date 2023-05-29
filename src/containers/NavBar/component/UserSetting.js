@@ -56,7 +56,7 @@ const UserSetting = () => {
         onClose={handleCloseUserMenu}
       >
         {authUser && (
-          <MenuItem key="logout" onClick={handleCloseUserMenu}>
+          <MenuItem key="Account" onClick={handleCloseUserMenu}>
             <Link to="/Account">
               <Button>Account</Button>
             </Link>

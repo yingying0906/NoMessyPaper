@@ -1,9 +1,14 @@
 import { ref, set, push, remove } from "firebase/database";
-import { ref as sRef, getDownloadURL, deleteObject } from "firebase/storage";
+import {
+  ref as sRef,
+  getDownloadURL,
+  deleteObject,
+  uploadBytes,
+} from "firebase/storage";
 
 import { db, storage } from "../firebase";
-import { uploadBytes } from "firebase/storage";
 
+// new reference
 const writeNewReference = (UID, Item) => {
   const reference = ref(db, "referenceList/" + UID);
   const newReference = push(reference, Item);
@@ -24,11 +29,14 @@ const writeNewFile = async (UID, RefId, file) => {
     });
 };
 
+// edit reference
+
 const editReference = (UID, RefId, Item) => {
   const reference = ref(db, `referenceList/${UID}/${RefId}`);
   set(reference, Item);
 };
 
+// delete reference
 const deleteReference = async (UID, RefId, RefFileName) => {
   const reference = ref(db, `referenceList/${UID}/${RefId}`);
 
@@ -48,7 +56,7 @@ const deleteReference = async (UID, RefId, RefFileName) => {
       });
   }
 
-  //delete json
+  // delete json
   await remove(reference)
     .then(() => {
       console.log("location removed");
@@ -58,6 +66,7 @@ const deleteReference = async (UID, RefId, RefFileName) => {
     });
 };
 
+// download file
 const downloadFile = async (UID, RefId, fileName) => {
   const storageRef = sRef(storage, `referenceList/${UID}/${RefId}/${fileName}`);
 

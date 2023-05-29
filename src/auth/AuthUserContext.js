@@ -1,14 +1,16 @@
 import * as React from "react";
 
 import { auth, db } from "../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { ref, get } from "firebase/database";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+
+import { useNavigate } from "react-router-dom";
 
 export const AuthUserContext = React.createContext();
 
 const AuthUserProvider = ({ children }) => {
   const navigate = useNavigate();
+
   const [authUser, setAuthUser] = React.useState(null);
   const [apiKey, setApiKey] = React.useState("");
 
@@ -26,6 +28,7 @@ const AuthUserProvider = ({ children }) => {
     };
   }, []);
 
+  // change api key
   React.useEffect(() => {
     if (authUser) {
       const uid = authUser.uid;

@@ -1,9 +1,11 @@
 import * as React from "react";
 import { IconButton } from "@mui/material";
+
+import { deleteReference } from "../../../../database/controlDatabase";
+import { BackDropContext } from "../backDrop/BackDropContext";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { deleteReference } from "../../../database/controlDatabase";
-import { BackDropContext } from "./backDrop/BackDropContext";
 
 const handleDeleteMultiple = (rowSelected, refs, authUser) => {
   console.log(rowSelected);

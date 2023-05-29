@@ -1,23 +1,26 @@
 import * as React from "react";
 import { db } from "../firebase";
-import { ref, push, get, onValue } from "firebase/database";
+import { ref, push, get, onValue, set } from "firebase/database";
 
 import { AuthUserContext } from "../auth/AuthUserContext";
 export const ReferenceContext = React.createContext();
 
-//provider
 export const ReferenceProvider = ({ children }) => {
-  // category
-  const [categories, setCategories] = React.useState([]);
   const { authUser } = React.useContext(AuthUserContext);
 
+  const [categories, setCategories] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  // categories
   const writeCategoriesDb = (uid, categories) => {
     const reference = ref(db, "categories/" + uid);
-    push(reference, categories);
+    const refID = push(reference, categories);
+    return refID.key;
   };
 
   React.useEffect(() => {
     if (authUser) {
+      setLoading(true);
       // get categories
       const categoriesRef = ref(db, `/categories/${authUser.uid}`);
       get(categoriesRef)
@@ -25,7 +28,7 @@ export const ReferenceProvider = ({ children }) => {
           if (snapshot.exists()) {
             const categories = [];
             for (const [key, value] of Object.entries(snapshot.val())) {
-              categories.push({ name: value, checked: false });
+              categories.push({ name: value, checked: false, refID: key });
             }
             setCategories(categories);
 
@@ -37,6 +40,7 @@ export const ReferenceProvider = ({ children }) => {
         .catch((error) => {
           console.error("Error retrieving categories:", error);
         });
+      setLoading(false);
     }
   }, [authUser]);
 
@@ -47,7 +51,9 @@ export const ReferenceProvider = ({ children }) => {
     const referenceRef = ref(db, `referenceList/${authUser?.uid}`);
 
     const handleChange = (snapshot) => {
+      setLoading(true);
       if (snapshot.exists()) {
+        console.log("new ref");
         const referencesData = snapshot.val();
         const referencesArray = Object.keys(referencesData).map(
           (key, index) => ({
@@ -61,6 +67,8 @@ export const ReferenceProvider = ({ children }) => {
       } else {
         setReferences([]);
       }
+
+      setLoading(false);
     };
     const referenceListener = onValue(
       referenceRef,
@@ -76,7 +84,7 @@ export const ReferenceProvider = ({ children }) => {
     return () => {
       referenceListener();
     };
-  }, [authUser, setReferences]);
+  }, [authUser]);
 
   const contextValue = {
     categories,
@@ -84,6 +92,8 @@ export const ReferenceProvider = ({ children }) => {
     writeCategoriesDb,
     references,
     setReferences,
+    loading,
+    setLoading,
   };
 
   return (
