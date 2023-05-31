@@ -9,7 +9,6 @@ import { Box } from "@mui/material";
 
 import ManualReferenceFill from "./component/ManualReferenceFill";
 import BibtexReference from "./component/BibtexReference";
-import SnackBarCustom from "../../containers/SnackBars/SnackBarCustom";
 
 const AddReferencePage = () => {
   const [value, setValue] = React.useState("1");
@@ -30,14 +29,13 @@ const AddReferencePage = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ManualReferenceFill />
+            <ManualReferenceFill ref={null} type={null} />
           </TabPanel>
           <TabPanel value="2">
             <BibtexReference />
           </TabPanel>
         </TabContext>
       </div>
-      <SnackBarCustom />
     </div>
   );
 };

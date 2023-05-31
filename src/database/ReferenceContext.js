@@ -11,36 +11,38 @@ export const ReferenceProvider = ({ children }) => {
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
-  // categories
-  const writeCategoriesDb = (uid, categories) => {
-    const reference = ref(db, "categories/" + uid);
-    const refID = push(reference, categories);
-    return refID.key;
-  };
-
   React.useEffect(() => {
     if (authUser) {
       setLoading(true);
-      // get categories
-      const categoriesRef = ref(db, `/categories/${authUser.uid}`);
-      get(categoriesRef)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const categories = [];
-            for (const [key, value] of Object.entries(snapshot.val())) {
-              categories.push({ name: value, checked: false, refID: key });
-            }
-            setCategories(categories);
 
-            console.log("categories retrieved");
-          } else {
-            console.log("no categories");
+      const categoriesRef = ref(db, `/categories/${authUser.uid}`);
+
+      const handleCategoriesChange = (snapshot) => {
+        if (snapshot.exists()) {
+          const categories = [];
+          for (const [key, value] of Object.entries(snapshot.val())) {
+            categories.push({ name: value, checked: false, refID: key });
           }
-        })
-        .catch((error) => {
-          console.error("Error retrieving categories:", error);
-        });
-      setLoading(false);
+          setCategories(categories);
+
+          console.log("categories retrieved");
+        } else {
+          console.log("no categories");
+        }
+      };
+
+      const categoriesListener = onValue(
+        categoriesRef,
+        (snapshot) => {
+          handleCategoriesChange(snapshot);
+        },
+        {
+          onlyOnce: false,
+        }
+      );
+      return () => {
+        categoriesListener();
+      };
     }
   }, [authUser]);
 
@@ -50,7 +52,7 @@ export const ReferenceProvider = ({ children }) => {
   React.useEffect(() => {
     const referenceRef = ref(db, `referenceList/${authUser?.uid}`);
 
-    const handleChange = (snapshot) => {
+    const handleReferenceChange = (snapshot) => {
       setLoading(true);
       if (snapshot.exists()) {
         console.log("new ref");
@@ -73,7 +75,7 @@ export const ReferenceProvider = ({ children }) => {
     const referenceListener = onValue(
       referenceRef,
       (snapshot) => {
-        handleChange(snapshot);
+        handleReferenceChange(snapshot);
       },
       {
         onlyOnce: false,
@@ -89,7 +91,6 @@ export const ReferenceProvider = ({ children }) => {
   const contextValue = {
     categories,
     setCategories,
-    writeCategoriesDb,
     references,
     setReferences,
     loading,

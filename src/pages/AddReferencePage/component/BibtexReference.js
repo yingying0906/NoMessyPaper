@@ -25,6 +25,7 @@ const BibtexReference = () => {
     bibtex: "",
     tags: "",
     selectedFile: null,
+    link: "",
   });
 
   const [isValidBibTeX, setIsValidBibTeX] = React.useState(true);
@@ -85,6 +86,8 @@ const BibtexReference = () => {
       tags: tags,
       fileName: selectedFile ? selectedFile.name : null,
       categories: writeCategories,
+      bibtex: formState.bibtex,
+      link: formState.link,
     };
     const referenceId = writeNewReference(authUser.uid, ref);
 
@@ -140,7 +143,6 @@ const BibtexReference = () => {
                   tags: value,
                 }));
               }}
-              required
               variant="outlined"
               color="primary"
               type="text"

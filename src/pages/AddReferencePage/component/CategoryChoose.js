@@ -7,13 +7,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { AuthUserContext } from "../../../auth/AuthUserContext";
 import { ReferenceContext } from "../../../database/ReferenceContext";
 
+import { writeCategoriesDb } from "../../../database/controlCategory";
+
 import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
 
 const CategoryChoose = () => {
   const { authUser } = React.useContext(AuthUserContext);
 
-  const { categories, setCategories, writeCategoriesDb, loading } =
+  const { categories, setCategories, loading } =
     React.useContext(ReferenceContext);
   const [newCategory, setNewCategory] = React.useState("");
   const [openNewCategory, setOpenNewCategory] = React.useState(false);
@@ -27,13 +29,6 @@ const CategoryChoose = () => {
       };
       return updatedCategories;
     });
-  };
-
-  const addCategory = (catName, refID) => {
-    setCategories((prevCategories) => [
-      ...prevCategories,
-      { name: `${catName}`, checked: false, refID: refID },
-    ]);
   };
 
   return (
@@ -88,7 +83,6 @@ const CategoryChoose = () => {
               setOpenNewCategory(false);
               const refId = writeCategoriesDb(authUser.uid, newCategory);
               console.log("add ", refId);
-              addCategory(newCategory, refId);
               setNewCategory("");
             }}
           >

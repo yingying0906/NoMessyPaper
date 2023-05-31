@@ -13,7 +13,7 @@ const EditReferenceForm = () => {
   const [author, setAuthor] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [year, setYear] = React.useState("");
-  const [journal, setPublisher] = React.useState("");
+  const [journal, setJournal] = React.useState("");
   const [tags, setTags] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
 
@@ -25,7 +25,7 @@ const EditReferenceForm = () => {
       setAuthor(editingFile.author || "");
       setTitle(editingFile.title || "");
       setYear(editingFile.year || "");
-      setPublisher(editingFile.journal || "");
+      setJournal(editingFile.journal || "");
       setTags(editingFile.tags || "");
     }
   }, [editingFile]);
@@ -99,7 +99,7 @@ const EditReferenceForm = () => {
         <TextField
           disabled={authUser == null}
           label="Journal"
-          onChange={(e) => setPublisher(e.target.value)}
+          onChange={(e) => setJournal(e.target.value)}
           required
           variant="outlined"
           color="primary"

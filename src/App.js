@@ -10,6 +10,9 @@ import AddReferencePage from "./pages/AddReferencePage/AddReferencePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import AccountPage from "./pages/AccountPage/AccountPage";
 
+import SnackBarCustom from "./containers/SnackBars/SnackBarCustom";
+import NotePage from "./pages/NotePage/NotePage";
+
 function App() {
   const theme = createTheme({
     palette: {
@@ -50,7 +53,9 @@ function App() {
           <Route path="/Add" element={<AddReferencePage />} />
           <Route path="/Search" element={<SearchPage />} />
           <Route path="/Account" element={<AccountPage />} />
+          <Route path="/Note/:noteId" element={<NotePage />} />
         </Routes>
+        <SnackBarCustom />
       </ThemeProvider>
     </div>
   );

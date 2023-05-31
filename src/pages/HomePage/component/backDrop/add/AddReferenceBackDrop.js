@@ -19,7 +19,7 @@ const AddReferenceBackDrop = (props) => {
   return (
     <div
       style={{
-        width: "40vw",
+        width: "60vw",
         backgroundColor: "white",
         padding: "20px",
         borderRadius: "10px",
@@ -44,7 +44,7 @@ const AddReferenceBackDrop = (props) => {
         </Box>
         <TabPanel value="1">
           <h3 style={{ textAlign: "start" }}>Plain Text</h3>
-          <ManualReferenceFill />
+          <ManualReferenceFill ref={null} type={null} />
         </TabPanel>
         <TabPanel value="2">
           <h3 style={{ textAlign: "start" }}>Bibtex</h3>

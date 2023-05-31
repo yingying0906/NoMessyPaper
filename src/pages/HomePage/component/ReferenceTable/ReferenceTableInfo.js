@@ -3,8 +3,10 @@ import { Chip, IconButton, Tooltip } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
-import { downloadFile } from "../../../../database/controlDatabase";
+import { enterLink } from "../../../../database/controlDatabase";
+import { Link } from "react-router-dom";
 
 const columns = [
   { field: "fakeId", headerName: "ID", sortable: false, flex: 1 },
@@ -45,18 +47,20 @@ const columns = [
     renderCell: (params) => {
       return (
         <div>
-          {params.row.fileName && (
-            <Tooltip title="Open File in New Tab">
-              <IconButton
-                onClick={() =>
-                  downloadFile(params.UID, params.row.id, params.row.fileName)
-                }
-              >
+          {params.row.link && (
+            <Tooltip title="Open Link in New Tab">
+              <IconButton onClick={() => enterLink(params.UID, params.row.id)}>
                 <OpenInNewIcon />
               </IconButton>
             </Tooltip>
           )}
-
+          <Tooltip title="Note">
+            <Link to={`/Note/${params.row.id}`}>
+              <IconButton>
+                <EditNoteIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           <Tooltip title="Edit">
             <IconButton
               onClick={() => {
@@ -70,14 +74,6 @@ const columns = [
               <EditIcon />
             </IconButton>
           </Tooltip>
-
-          {/*<IconButton
-            onClick={() =>
-              deleteReference(params.UID, params.row.id, params.row.fileName)
-            }
-          >
-            <DeleteIcon />
-          </IconButton>*/}
         </div>
       );
     },

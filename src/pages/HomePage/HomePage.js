@@ -45,7 +45,11 @@ const HomePage = () => {
               <Skeleton />
             </>
           ) : (
-            <CategoryList handlePageChange={handlePageChange} />
+            <CategoryList
+              handlePageChange={handlePageChange}
+              page={page}
+              setPage={setPage}
+            />
           )}
         </Grid>
         <Grid xs={10}>
@@ -65,7 +69,7 @@ const HomePage = () => {
 
       <>
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={openAdd}
           onClick={handleClose}
         >
@@ -75,7 +79,7 @@ const HomePage = () => {
         </Backdrop>
 
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={openEdit}
           onClick={handleClose}
         >

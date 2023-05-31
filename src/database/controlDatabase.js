@@ -1,4 +1,4 @@
-import { ref, set, push, remove } from "firebase/database";
+import { ref, set, push, remove, get } from "firebase/database";
 import {
   ref as sRef,
   getDownloadURL,
@@ -30,7 +30,6 @@ const writeNewFile = async (UID, RefId, file) => {
 };
 
 // edit reference
-
 const editReference = (UID, RefId, Item) => {
   const reference = ref(db, `referenceList/${UID}/${RefId}`);
   set(reference, Item);
@@ -70,13 +69,36 @@ const deleteReference = async (UID, RefId, RefFileName) => {
 const downloadFile = async (UID, RefId, fileName) => {
   const storageRef = sRef(storage, `referenceList/${UID}/${RefId}/${fileName}`);
 
-  console.log(storageRef);
   try {
     const url = await getDownloadURL(storageRef);
     console.log(url);
 
-    window.open(url, "_blank"); // Open URL in a new tab
+    window.open(url, "_blank");
 
+    return url;
+  } catch (error) {
+    console.log("error: ", error);
+    return null;
+  }
+};
+
+const enterLink = async (UID, RefId) => {
+  const reference = ref(db, `referenceList/${UID}/${RefId}`);
+  const snapshot = await get(reference);
+  if (snapshot.exists()) {
+    window.open(snapshot.val().link, "_blank");
+    return 1;
+  } else {
+    return null;
+  }
+};
+
+// get file url
+const getFileUrl = async (UID, RefId, fileName) => {
+  const storageRef = sRef(storage, `referenceList/${UID}/${RefId}/${fileName}`);
+
+  try {
+    const url = await getDownloadURL(storageRef);
     return url;
   } catch (error) {
     console.log("error: ", error);
@@ -90,4 +112,6 @@ export {
   writeNewFile,
   downloadFile,
   editReference,
+  getFileUrl,
+  enterLink,
 };

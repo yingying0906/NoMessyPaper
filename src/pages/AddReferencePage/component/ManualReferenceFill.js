@@ -12,11 +12,14 @@ import { AuthUserContext } from "../../../auth/AuthUserContext";
 import { BackDropContext } from "../../HomePage/component/backDrop/BackDropContext";
 import { SnackBarContext } from "../../../containers/SnackBars/SnackBarContext";
 import { ReferenceContext } from "../../../database/ReferenceContext";
+import { FormStateContext } from "../../../database/FormStateContext.js";
+import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
 import "./ReferenceFill.css";
 import CategoryChoose from "./CategoryChoose";
+import { Link } from "@mui/material";
 
 const infoFields = [
   {
@@ -46,21 +49,19 @@ const infoFields = [
   {
     label: "Tags",
     state: "tags",
-    required: true,
+    required: false,
     type: "text",
+  },
+  {
+    label: "Link",
+    state: "link",
+    required: false,
+    type: "url",
   },
 ];
 
-const ManualReferenceFill = () => {
-  const [formState, setFormState] = React.useState({
-    author: "",
-    title: "",
-    year: "",
-    journal: "",
-    tags: "",
-    selectedFile: null,
-  });
-
+const ManualReferenceFill = (props) => {
+  const { formState, setFormState } = React.useContext(FormStateContext);
   const { authUser } = React.useContext(AuthUserContext);
   const { setOpenAdd } = React.useContext(BackDropContext);
   const { setOpenSnack, setSnackMessage } = React.useContext(SnackBarContext);
@@ -75,6 +76,7 @@ const ManualReferenceFill = () => {
       journal: "",
       tags: "",
       selectedFile: null,
+      link: "",
     });
     setCategories(
       categories.map((cat) => {
@@ -85,7 +87,8 @@ const ManualReferenceFill = () => {
 
   const submitRef = (e) => {
     e.preventDefault();
-    const { author, title, year, journal, tags, selectedFile } = formState;
+    const { author, title, year, journal, tags, selectedFile, link } =
+      formState;
 
     const writeCategories = categories
       .filter((cat) => cat.checked)
@@ -101,6 +104,7 @@ const ManualReferenceFill = () => {
       tags,
       fileName: selectedFile ? selectedFile.name : null,
       categories: writeCategories,
+      link: link,
     };
     const referenceId = writeNewReference(authUser.uid, ref);
 
@@ -110,6 +114,7 @@ const ManualReferenceFill = () => {
     setOpenAdd(false);
     setSnackMessage("Reference added successfully");
     setOpenSnack(true);
+    if (props && props.handleClose) props.handleClose();
     clearFill();
   };
 
@@ -159,6 +164,22 @@ const ManualReferenceFill = () => {
                 />
               </label>
             </Button>
+
+            {props.paperLink !== "" && props.paperLink !== undefined && (
+              <>
+                <Link href={props.paperLink} target="_blank">
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    sx={{ margin: "5px 5px" }}
+                    startIcon={<InsertLinkOutlinedIcon />}
+                  >
+                    PDF Link
+                  </Button>
+                </Link>
+              </>
+            )}
+
             {formState.selectedFile && (
               <div style={{ marginBottom: "4px" }}>
                 <span style={{ color: "black" }}>

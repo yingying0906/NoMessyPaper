@@ -1,0 +1,11 @@
+.editCategory {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.editCategory input {
+  display: inline-block;
+  width: 50%;
+}

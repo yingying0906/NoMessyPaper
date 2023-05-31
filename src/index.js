@@ -10,6 +10,7 @@ import SnackBarProvider from "./containers/SnackBars/SnackBarContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 import { ReferenceProvider } from "./database/ReferenceContext";
+import { FormStateProvider } from "./database/FormStateContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,7 +20,9 @@ root.render(
         <ReferenceProvider>
           <SnackBarProvider>
             <BackDropProvider>
-              <App />
+              <FormStateProvider>
+                <App />
+              </FormStateProvider>
             </BackDropProvider>
           </SnackBarProvider>
         </ReferenceProvider>

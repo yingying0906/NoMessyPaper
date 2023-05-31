@@ -4,6 +4,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { columns } from "./ReferenceTableInfo";
 import { DataGrid } from "@mui/x-data-grid";
+import { Chip } from "@mui/material";
 import { AuthUserContext } from "../../../../auth/AuthUserContext";
 import { BackDropContext } from "../backDrop/BackDropContext";
 import { ReferenceContext } from "../../../../database/ReferenceContext";
@@ -33,6 +34,10 @@ const ReferenceTable = (props) => {
             UID: authUser.uid,
             handleEdit: handleEdit,
           }),
+      };
+    } else if (column.field === "tags") {
+      return {
+        ...column,
       };
     } else {
       return {
