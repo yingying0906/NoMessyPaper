@@ -27,7 +27,9 @@ const FetchPaperFromGoogleScholar = ({
     const fetchData = async () => {
       try {
         // if want to search paper => use this  因為只能搜尋 100次/月 ， api_key=可以切換成自己的api_key (；´ﾟωﾟ｀人)
-        /* const response = await fetch(`https://no-messy-paper.netlify.app/.netlify/functions/proxy/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&api_key=40ec1a6eed3621a8e92723e97d5ddf679d0de9afab41679a8e1c93dd3038c724`).then((response) => response.json()); */
+        const response = await fetch(
+          `/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&api_key=40ec1a6eed3621a8e92723e97d5ddf679d0de9afab41679a8e1c93dd3038c724`
+        ).then((response) => response.json());
 
         /*         // via api key (by po ying)
         const response = await fetch(
@@ -35,9 +37,9 @@ const FetchPaperFromGoogleScholar = ({
         ).then((response) => response.json()); */
 
         // if 使用已有的json檔 => use this
-        const response = await fetch("http://localhost:3001/paper").then(
+        /* const response = await fetch("http://localhost:3001/paper").then(
           (response) => response.json()
-        );
+        ); */
 
         // 會有以下問題 => No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
         /*         const response = await fetch(
