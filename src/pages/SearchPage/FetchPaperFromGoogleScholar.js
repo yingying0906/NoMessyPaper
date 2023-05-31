@@ -29,8 +29,11 @@ const FetchPaperFromGoogleScholar = ({
         // if want to search paper => use this  因為只能搜尋 100次/月 ， api_key=可以切換成自己的api_key (；´ﾟωﾟ｀人)
         const response = await fetch(
           `/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&api_key=${apiKey}`
-        ).then((response) => response.json());
-
+        )
+          .then((response) => response.json())
+          .catch((error) => {
+            alert("Error fetching paper data:", error);
+          });
         /*         // via api key (by po ying)
         const response = await fetch(
           `http://localhost:3001/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&api_key=${apiKey}`
