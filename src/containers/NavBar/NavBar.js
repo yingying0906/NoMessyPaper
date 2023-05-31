@@ -11,32 +11,31 @@ const NavBar = (props) => {
 
   return (
     <div>
-      <AppBar position="relative">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex" },
-              }}
-            >
-              <NavElement />
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ marginRight: "5px" }}>
-                Welcome Back, {authUser ? authUser.email : "Guest"}
-              </div>
-              <UserSetting />
-            </Box>
-          </Toolbar>
-        </Container>
+      <AppBar position="relative" style={{ padding: "0px 20px" }}>
+        <Toolbar disableGutters>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flex: "1 0 auto",
+            }}
+          >
+            <NavElement />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flex: "1 0 auto",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div style={{ marginRight: "5px" }}>
+              Welcome Back, {authUser ? authUser.email : "Guest"}
+            </div>
+            <UserSetting />
+          </Box>
+        </Toolbar>
       </AppBar>
     </div>
   );

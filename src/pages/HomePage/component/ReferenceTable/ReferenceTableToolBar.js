@@ -91,7 +91,7 @@ const RefTableToolBar = (props) => {
               handleExportMultiple(rowSelected, references, authUser)
             }
           >
-            123
+            Export
           </IconButton>
         </>
       )}

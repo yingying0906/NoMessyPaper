@@ -89,6 +89,7 @@ const FetchPaperFromGoogleScholar = ({
       journal: publication,
       tags: "",
       selectedFile: null,
+      link: data.link,
     };
     setFormState(ref);
 

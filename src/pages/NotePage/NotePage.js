@@ -33,7 +33,7 @@ const NotePage = () => {
 
   return (
     <div>
-      <h1>123</h1>
+      <h1>NotePage</h1>
       <Grid container spacing={1}>
         {pdfURL && (
           <Grid item xs={6}>
@@ -53,7 +53,7 @@ const NotePage = () => {
         )}
 
         <Grid item xs={12}>
-          1234444444444444444
+          WORKSAPCE
         </Grid>
       </Grid>
     </div>
