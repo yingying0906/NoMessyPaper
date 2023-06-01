@@ -1,0 +1,20 @@
+.text-box{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  /* transform: translate(-23px, -23px); */
+  padding: 20px;
+  /* height: auto; */
+  background-color: rgb(185, 185, 185);
+  border:none;
+  outline: none;
+  /* color: aqua; */
+  /* opacity: 0.3; */
+}
+
+/* .text-box:focus{
+  top: 0px;
+  left: 0px;
+  transform: translate(-23px, -23px);
+  border:3px gray solid;
+} */

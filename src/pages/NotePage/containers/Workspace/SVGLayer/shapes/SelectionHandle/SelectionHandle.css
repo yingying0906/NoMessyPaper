@@ -1,0 +1,25 @@
+.selection-handler{
+  stroke: rgb(49, 169, 249, 0.8);
+  stroke-width: 2;
+  fill: rgb(49, 169, 249, 1.0);
+}
+
+.c0{
+  cursor: nwse-resize;
+}
+
+.c3{
+  cursor: nwse-resize;
+}
+
+.c1{
+  cursor: nesw-resize;
+}
+
+.c2{
+  cursor: nesw-resize;
+}
+
+.dots:hover{
+  fill: rgb(13, 69, 107);
+}

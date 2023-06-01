@@ -1,0 +1,37 @@
+.CommandList {
+    /* position: absolute; */
+    /* top: 10px; */
+    /* left: 10px; */
+    position: absolute;
+    top: 10px;
+    left: 1110px;
+  
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-left-width: 0px;
+    background-color: white;
+  
+    width: 150px;
+    height: 700px;
+  
+    /* user-select: none; */
+  }
+
+.CommandBox{
+    /* width: 100%; */
+    background-color: gainsboro;
+    margin: 5px;
+}
+
+.CommandBox-curr{
+    background-color: black;
+    margin: 5px;
+    color: #00b100;
+}
+
+.CommandBox-undo{
+    background-color: gray;
+    margin: 5px;
+    color: rgb(68, 68, 68);
+    text-decoration:line-through;
+}

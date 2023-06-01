@@ -11,6 +11,8 @@ import { ReferenceContext } from "../../database/ReferenceContext";
 
 import { Grid } from "@mui/material";
 
+import NoteBord from "./NoteBord";
+
 const NotePage = () => {
   const [pdfURL, setPdfURL] = React.useState(null);
   const { authUser } = React.useContext(AuthUserContext);
@@ -52,8 +54,9 @@ const NotePage = () => {
           </Grid>
         )}
 
-        <Grid item xs={12}>
-          WORKSAPCE
+        <Grid item xs={6}>
+          {/* WORKSAPCE */}
+          <NoteBord className="note-space"/>
         </Grid>
       </Grid>
     </div>
