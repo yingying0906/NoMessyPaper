@@ -36,25 +36,7 @@ const SVGLayer = () => {
     grabLayer,
     selectedShapeId,
     selectShape,
-    getInfoFromDB,
   } = useContext(ControlContext);
-
-  const { authUser } = useContext(AuthUserContext);
-  const { noteId } = useParams();
-  const { mindmaps } = useContext(ReferenceContext);
-
-  useEffect(() => {
-    if (authUser === null) return;
-    const mindmapCurrent = mindmaps.find((mindmap) => mindmap.id === noteId);
-
-    if (mindmapCurrent !== undefined) {
-      getInfoFromDB(
-        mindmapCurrent.shapesMap,
-        mindmapCurrent.shapes,
-        mindmapCurrent.anchorPoint
-      );
-    }
-  }, [authUser, noteId, mindmaps]);
 
   // use useState to set elements in the React state directly
   // the first element of the list is the state value
@@ -128,8 +110,8 @@ const SVGLayer = () => {
         if (e.target.nodeName === "TEXTAREA") {
           // e.target.getAttribute()
           const targetId = e.target.parentNode.id;
-          if(texting && (targetId === selectedShapeId)) return;
-          if(targetId !== selectedShapeId) setTexting(false);
+          if (texting && targetId === selectedShapeId) return;
+          if (targetId !== selectedShapeId) setTexting(false);
           // e.target.blur();
           selectShape(targetId);
           setDragging(true);
@@ -306,7 +288,7 @@ const SVGLayer = () => {
           });
           break;
         }
-        default:{
+        default: {
           break;
         }
       }
@@ -518,7 +500,7 @@ const SVGLayer = () => {
   };
 
   const handleDbclick = (e) => {
-    if(e.target.nodeName === "TEXTAREA"){
+    if (e.target.nodeName === "TEXTAREA") {
       setTexting(true);
     }
   };
@@ -697,28 +679,6 @@ const SVGLayer = () => {
       });
     }
   };
-
-  // auto save per 60 seconds
-  const { setOpenSnack, setSnackMessage } = useContext(SnackBarContext);
-  useEffect(() => {
-    const saveNoteContent = () => {
-      console.log("autosaving");
-      setSnackMessage("Autosaving");
-      setOpenSnack(true);
-      const obj = {
-        shapesMap: shapesMap,
-        shapes: shapes,
-        anchorPoint: anchorPoint,
-      };
-      updateMindmap(authUser.uid, noteId, obj);
-    };
-
-    const autosaveTimer = setInterval(saveNoteContent, 60000);
-
-    return () => {
-      clearInterval(autosaveTimer);
-    };
-  }, [shapesMap, shapes, anchorPoint]);
 
   return (
     <svg

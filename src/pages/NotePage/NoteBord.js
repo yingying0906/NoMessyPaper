@@ -227,9 +227,9 @@ class NoteBord extends Component {
     // }
     this.setState({ currAction: action });
     // this.selectShape(undefined);
-    if(action === "add") {
-        selectedObj = null;
-        this.setState({ selectedShapeId: undefined });
+    if (action === "add") {
+      selectedObj = null;
+      this.setState({ selectedShapeId: undefined });
     }
   };
 
@@ -427,19 +427,6 @@ class NoteBord extends Component {
     }
   };
 
-  // database
-  getInfoFromDB = (shapesMapSent, shapesSent, anchorPointSent) => {
-    let shapesMap = { ...this.state.shapesMap };
-    shapesMap = shapesMapSent;
-    this.setState({ shapesMap });
-    let shapes = [...this.state.shapes];
-    shapes = shapesSent;
-    this.setState({ shapes });
-    let anchorPoint = { ...this.state.anchorPoint };
-    anchorPoint = anchorPointSent;
-    this.setState({ anchorPoint });
-  };
-
   render() {
     const {
       currMode,
@@ -505,8 +492,6 @@ class NoteBord extends Component {
 
           undo: this.undo,
           redo: this.redo,
-
-          getInfoFromDB: this.getInfoFromDB,
         }}
       >
         <div className="note-space">

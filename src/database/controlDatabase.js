@@ -109,20 +109,13 @@ const getFileUrl = async (UID, RefId, fileName) => {
   const storageRef = sRef(storage, `referenceList/${UID}/${RefId}/${fileName}`);
 
   try {
-    await getDownloadURL(storageRef)
-      .then((url) => {
-        return url;
-      })
-      .catch((error) => {
-        console.log("error1: ", error);
-        return null;
-      });
+    const url = await getDownloadURL(storageRef);
+    return url;
   } catch (error) {
-    console.log("error2: ", error);
+    console.log("error: ", error);
     return null;
   }
 };
-
 // mindmap
 const writeNewMindmap = (UID, RefId) => {
   const item = {

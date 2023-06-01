@@ -46,8 +46,6 @@ const controlContext = createContext({
 
   undo: () => {},
   redo: () => {},
-
-  getInfoFromDB: () => {},
 });
 
 export default controlContext;

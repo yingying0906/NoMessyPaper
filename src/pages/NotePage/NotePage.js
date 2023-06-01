@@ -17,24 +17,24 @@ import PdfViewer from "./PdfViewer/PdfViewer";
 import NoteBord from "./NoteBord";
 
 const NotePage = () => {
-  const [pdfUrl, setPdfUrl] = useState(null);
-  const { noteId } = useParams();
+  const [pdfUrl, setPdfUrl] = React.useState(null);
   const { authUser } = React.useContext(AuthUserContext);
   const { references } = React.useContext(ReferenceContext);
 
-  useEffect(() => {
+  const { noteId } = useParams();
+  console.log("noteId: ", noteId);
+
+  React.useEffect(() => {
     if (authUser === null) return;
     const note = references.find((ref) => ref.id === noteId);
     if (note !== undefined) {
-      getFileUrl(authUser.uid, noteId, note.fileName)
-        .then((url) => {
-          setPdfUrl(url);
-        })
-        .catch((err) => {
-          console.log("no pdf");
-        });
+      getFileUrl(authUser.uid, noteId, note.fileName).then((url) => {
+        setPdfUrl(url);
+      });
     }
-  }, [authUser, noteId, references]);
+
+    console.log("pdfURL: ", pdfUrl);
+  }, [noteId]);
 
   return (
     <div>
