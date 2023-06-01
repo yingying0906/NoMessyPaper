@@ -78,6 +78,7 @@ const SVGLayer = () => {
     x: undefined,
     y: undefined,
   });
+  const [texting, setTexting] = useState(false);
   // const [resCurrPoint, setResCurrPoint] = useState({ x: undefined, y: undefined });
 
   const [grabbing, setGrabbing] = useState(false);
@@ -114,6 +115,7 @@ const SVGLayer = () => {
       if (e.target.nodeName === "svg") {
         // deselect
         selectShape(undefined);
+        setTexting(false);
         if (currMode === "grab") {
           setGrabbing(true);
           setMouseDownPoint({
@@ -126,6 +128,9 @@ const SVGLayer = () => {
         if (e.target.nodeName === "TEXTAREA") {
           // e.target.getAttribute()
           const targetId = e.target.parentNode.id;
+          if(texting && (targetId === selectedShapeId)) return;
+          if(targetId !== selectedShapeId) setTexting(false);
+          // e.target.blur();
           selectShape(targetId);
           setDragging(true);
           setMouseDownPoint({
@@ -141,6 +146,7 @@ const SVGLayer = () => {
           );
         } else {
           const targetId = e.target.id;
+          setTexting(false);
           selectShape(targetId);
           setDragging(true);
           setMouseDownPoint({
@@ -298,6 +304,9 @@ const SVGLayer = () => {
               y: newY,
             },
           });
+          break;
+        }
+        default:{
           break;
         }
       }
@@ -508,6 +517,11 @@ const SVGLayer = () => {
     }
   };
 
+  const handleDbclick = (e) => {
+    if(e.target.nodeName === "TEXTAREA"){
+      setTexting(true);
+    }
+  };
   // useCallback gives a memoized version of the callback that changes when one of its dependencies change
   // the first argument is the function that will be run
   // the second is the dependencies that the function relies on
@@ -714,6 +728,7 @@ const SVGLayer = () => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onDoubleClick={handleDbclick}
       style={
         currMode === "grab" ? { cursor: "-webkit-grab", cursor: "grab" } : {}
       }

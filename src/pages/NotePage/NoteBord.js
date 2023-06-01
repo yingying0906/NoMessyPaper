@@ -227,6 +227,10 @@ class NoteBord extends Component {
     // }
     this.setState({ currAction: action });
     // this.selectShape(undefined);
+    if(action === "add") {
+        selectedObj = null;
+        this.setState({ selectedShapeId: undefined });
+    }
   };
 
   changeCurrBorderColor = (borderColor) => {
