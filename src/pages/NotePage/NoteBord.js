@@ -369,6 +369,27 @@ class NoteBord extends Component {
     this.updateShape(selectedShapeId, { textValue });
   };
 
+
+  addShape = (shapeData) => {
+    let shapes = [...this.state.shapes];
+    let shapesMap = { ...this.state.shapesMap };
+    const id = genId();
+    shapesMap[id] = {
+      ...shapeData,
+      id,
+    };
+    shapes.push(id);
+    this.setState({ shapes, shapesMap, selectedShapeId: id });
+    selectedObj = {
+      selectedShapeId: id,
+      ...shapeData,
+    };
+    this.undoHandler.selectedObj = selectedObj;
+    let cmdObj = new AddShapeCommandObject(this.undoHandler);
+    cmdObj.execute();
+    this.selectShape(undefined);
+  };
+
   selectShape = (id) => {
     this.setState({ selectedShapeId: id });
     if (id) {
@@ -426,6 +447,36 @@ class NoteBord extends Component {
       }
     }
   };
+
+  setShapes = (sentShapes) => {
+    // shapes = []
+    // shapes[x] = 'id'
+    this.setState({shapes: sentShapes});
+  }
+
+  setShapesmap = (sentShapemap) => {
+    // shapesMap[id] = {
+    //     type: "",
+    //     visible: true,
+    //     initCoords: initPoint,
+    //     finalCoords: finalPoint,
+    //     borderColor: currBorderColor,
+    //     borderWidth: currBorderWidth,
+    //     fillColor: currFillColor,
+    //     textColor: currTextColor,
+    //     textValue: '',
+    //     ...
+    // }
+    this.setState({shapesMap: sentShapemap});
+  }
+
+  setAnchor = (sentAnchor) => {
+    // anchorPoint: {
+    //     x: anchorPoint.x,
+    //     y: anchorPoint.y,
+    // };
+    this.setState({anchorPoint: sentAnchor});
+  }
 
   render() {
     const {
