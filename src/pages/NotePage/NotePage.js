@@ -10,9 +10,10 @@ import { AuthUserContext } from "../../auth/AuthUserContext";
 import { ReferenceContext } from "../../database/ReferenceContext";
 
 import { Grid } from "@mui/material";
+import PdfViewer from "./PdfViewer/PdfViewer";
 
 const NotePage = () => {
-  const [pdfURL, setPdfURL] = React.useState(null);
+  const [pdfUrl, setPdfUrl] = React.useState(null);
   const { authUser } = React.useContext(AuthUserContext);
   const { references } = React.useContext(ReferenceContext);
 
@@ -24,31 +25,20 @@ const NotePage = () => {
     const note = references.find((ref) => ref.id === noteId);
     if (note !== undefined) {
       getFileUrl(authUser.uid, noteId, note.fileName).then((url) => {
-        setPdfURL(url);
+        setPdfUrl(url);
       });
     }
 
-    console.log("pdfURL: ", pdfURL);
+    console.log("pdfUrl: ", pdfUrl);
   }, [noteId]);
 
   return (
     <div>
       <h1>NotePage</h1>
       <Grid container spacing={1}>
-        {pdfURL && (
+        {pdfUrl && (
           <Grid item xs={6}>
-            <object
-              style={{ height: "85vh" }}
-              data={pdfURL}
-              type="application/pdf"
-              width="100%"
-              height="600px"
-            >
-              <p>
-                Your web browser doesn't have a PDF plugin. Instead, you can{" "}
-                <a href={pdfURL}>click here to download the PDF file.</a>
-              </p>
-            </object>
+            <PdfViewer pdfUrl={pdfUrl} />
           </Grid>
         )}
 
