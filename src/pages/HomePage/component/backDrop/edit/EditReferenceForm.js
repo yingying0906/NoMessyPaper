@@ -58,7 +58,6 @@ const EditReferenceForm = () => {
           disabled={authUser == null}
           label="Author"
           onChange={(e) => setAuthor(e.target.value)}
-          required
           variant="outlined"
           color="primary"
           type="text"
@@ -86,7 +85,6 @@ const EditReferenceForm = () => {
           disabled={authUser == null}
           label="Year"
           onChange={(e) => setYear(e.target.value)}
-          required
           variant="outlined"
           color="primary"
           type="number"
@@ -100,7 +98,6 @@ const EditReferenceForm = () => {
           disabled={authUser == null}
           label="Journal"
           onChange={(e) => setJournal(e.target.value)}
-          required
           variant="outlined"
           color="primary"
           type="text"
@@ -114,7 +111,6 @@ const EditReferenceForm = () => {
           disabled={authUser == null}
           label="tags"
           onChange={(e) => setTags(e.target.value)}
-          required
           variant="outlined"
           color="primary"
           type="text"
