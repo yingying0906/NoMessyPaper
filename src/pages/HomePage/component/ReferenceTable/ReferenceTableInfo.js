@@ -3,7 +3,7 @@ import { Chip, IconButton, Tooltip } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 
 import { enterLink } from "../../../../database/controlDatabase";
 import { Link } from "react-router-dom";
@@ -44,6 +44,7 @@ const columns = [
     headerName: "",
     flex: 2,
     align: "right",
+
     renderCell: (params) => {
       return (
         <div>
@@ -57,7 +58,7 @@ const columns = [
           <Tooltip title="Note">
             <Link to={`/Note/${params.row.id}`}>
               <IconButton>
-                <EditNoteIcon />
+                <TextSnippetIcon />
               </IconButton>
             </Link>
           </Tooltip>

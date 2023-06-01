@@ -3,6 +3,8 @@ import { db } from "../firebase";
 import { ref, push, get, onValue, set } from "firebase/database";
 
 import { AuthUserContext } from "../auth/AuthUserContext";
+import controlContext from "../pages/NotePage/contexts/control-context";
+
 export const ReferenceContext = React.createContext();
 
 export const ReferenceProvider = ({ children }) => {
@@ -88,6 +90,39 @@ export const ReferenceProvider = ({ children }) => {
     };
   }, [authUser]);
 
+  const [mindmaps, setMindmaps] = React.useState([]);
+
+  React.useEffect(() => {
+    const mindmapRef = ref(db, `mindmapList/${authUser?.uid}`);
+
+    const handleMindmapChange = (snapshot) => {
+      if (snapshot.exists()) {
+        console.log("new mindmap");
+        const mindmapData = snapshot.val();
+        const mindmapArray = Object.keys(mindmapData).map((key) => ({
+          id: key,
+          ...mindmapData[key],
+        }));
+
+        setMindmaps(mindmapArray);
+
+        console.log("mindmap retrieved");
+      } else {
+        setReferences([]);
+      }
+
+      setLoading(false);
+    };
+
+    const mindmapListener = onValue(mindmapRef, (snapshot) => {
+      handleMindmapChange(snapshot);
+    });
+
+    return () => {
+      mindmapListener();
+    };
+  }, [authUser]);
+
   const contextValue = {
     categories,
     setCategories,
@@ -95,6 +130,8 @@ export const ReferenceProvider = ({ children }) => {
     setReferences,
     loading,
     setLoading,
+    mindmaps,
+    setMindmaps,
   };
 
   return (

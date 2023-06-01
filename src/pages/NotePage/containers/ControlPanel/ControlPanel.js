@@ -1,19 +1,30 @@
 import React, { useEffect, useContext, useCallback } from "react";
 // import { SwatchesPicker } from 'react-color';
 
-import { FaTrash } from "react-icons/fa";
-import { ImUndo, ImRedo } from "react-icons/im";
-import { MdOutlineBackHand, MdTextFields, MdFormatColorText, MdOutlineFormatColorFill, MdOutlineBorderColor } from "react-icons/md";
-import { CgAddR } from "react-icons/cg";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
+
+import OpenWithOutlinedIcon from "@mui/icons-material/OpenWithOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import CursorImg from "../../../../assets/cursor.png";
 import LineImg from "../../../../assets/line.png";
 import supportedColors from "../../shared/supportedColors";
 import ControlContext from "../../contexts/control-context";
-
+import { SnackBarContext } from "../../../../containers/SnackBars/SnackBarContext";
 import ColorSelector from "./ColorSelector";
 
 import "./ControlPanel.css";
+import { IconButton } from "@mui/material";
+import { updateMindmap } from "../../../../database/controlDatabase";
+import { AuthUserContext } from "../../../../auth/AuthUserContext";
+import { useParams } from "react-router-dom";
 
 // const Modes = ({
 //   currMode,
@@ -209,132 +220,152 @@ import "./ControlPanel.css";
 //   );
 // };
 
-const TextBoxUI =({currAction, changeCurrAction, 
-                   currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                   currFillColor, changeCurrFillColor, changeCurrFillColorFin,
-                   currTextColor, changeCurrTextColor, changeCurrTextColorFin}) => {
+const TextBoxUI = ({
+  currAction,
+  changeCurrAction,
+  currBorderColor,
+  changeCurrBorderColor,
+  changeCurrBorderColorFin,
+  currFillColor,
+  changeCurrFillColor,
+  changeCurrFillColorFin,
+  currTextColor,
+  changeCurrTextColor,
+  changeCurrTextColorFin,
+}) => {
   // console.log("UI " + currFillColor);
-  return(
+
+  return (
     <div className="Details">
       <div
-        className={["Mode", currAction === "add" ? "Active" : null].join(
-          " "
-        )}
+        className={["Mode", currAction === "add" ? "Active" : null].join(" ")}
         onClick={() => changeCurrAction("add")}
       >
-        <CgAddR className="ButtonIcon" />
+        <AddCircleOutlineIcon className="ButtonIcon" />
       </div>
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currBorderColor}
         setCurrColorContex={changeCurrBorderColor}
         setCurrColorContexFin={changeCurrBorderColorFin}
-        IconObj={MdOutlineBorderColor}
+        IconObj={BorderColorOutlinedIcon}
       />
 
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currFillColor}
         setCurrColorContex={changeCurrFillColor}
         setCurrColorContexFin={changeCurrFillColorFin}
-        IconObj={MdOutlineFormatColorFill}
+        IconObj={FormatColorFillIcon}
       />
 
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currTextColor}
         setCurrColorContex={changeCurrTextColor}
         setCurrColorContexFin={changeCurrTextColorFin}
-        IconObj={MdFormatColorText}
+        IconObj={FormatColorTextIcon}
       />
       {/* <div
         className="Mode"
       >
         <MdOutlineFormatColorFill className="ButtonIcon" color="green"/>
       </div> */}
-      
     </div>
-  )
-}
+  );
+};
 
-const LineUI = ({currAction, changeCurrAction, 
-                 currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin}) => {
-  return(
+const LineUI = ({
+  currAction,
+  changeCurrAction,
+  currBorderColor,
+  changeCurrBorderColor,
+  changeCurrBorderColorFin,
+}) => {
+  return (
     <div className="Details">
       <div
-        className={["Mode", currAction === "add" ? "Active" : null].join(
-          " "
-        )}
+        className={["Mode", currAction === "add" ? "Active" : null].join(" ")}
         onClick={() => changeCurrAction("add")}
       >
-        <CgAddR className="ButtonIcon" />
+        <AddCircleOutlineIcon className="ButtonIcon" />
       </div>
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currBorderColor}
         setCurrColorContex={changeCurrBorderColor}
         setCurrColorContexFin={changeCurrBorderColorFin}
-        IconObj={MdOutlineBorderColor}
+        IconObj={BorderColorOutlinedIcon}
       />
     </div>
-  )
-}
+  );
+};
 
-const RectUI = ({currAction, changeCurrAction, 
-                 currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                 currFillColor, changeCurrFillColor, changeCurrFillColorFin}) => {
-  return(
+const RectUI = ({
+  currAction,
+  changeCurrAction,
+  currBorderColor,
+  changeCurrBorderColor,
+  changeCurrBorderColorFin,
+  currFillColor,
+  changeCurrFillColor,
+  changeCurrFillColorFin,
+}) => {
+  return (
     <div className="Details">
       <div
-        className={["Mode", currAction === "add" ? "Active" : null].join(
-          " "
-        )}
+        className={["Mode", currAction === "add" ? "Active" : null].join(" ")}
         onClick={() => changeCurrAction("add")}
       >
-        <CgAddR className="ButtonIcon" />
+        <AddCircleOutlineIcon className="ButtonIcon" />
       </div>
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currBorderColor}
         setCurrColorContex={changeCurrBorderColor}
         setCurrColorContexFin={changeCurrBorderColorFin}
-        IconObj={MdOutlineBorderColor}
+        IconObj={BorderColorOutlinedIcon}
       />
 
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currFillColor}
         setCurrColorContex={changeCurrFillColor}
         setCurrColorContexFin={changeCurrFillColorFin}
-        IconObj={MdOutlineFormatColorFill}
+        IconObj={FormatColorFillIcon}
       />
     </div>
-  )
-}
+  );
+};
 
-const EllipseUI = ({currAction, changeCurrAction, 
-                    currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                    currFillColor, changeCurrFillColor, changeCurrFillColorFin}) => {
-  return(
+const EllipseUI = ({
+  currAction,
+  changeCurrAction,
+  currBorderColor,
+  changeCurrBorderColor,
+  changeCurrBorderColorFin,
+  currFillColor,
+  changeCurrFillColor,
+  changeCurrFillColorFin,
+}) => {
+  return (
     <div className="Details">
       <div
-        className={["Mode", currAction === "add" ? "Active" : null].join(
-          " "
-        )}
+        className={["Mode", currAction === "add" ? "Active" : null].join(" ")}
         onClick={() => changeCurrAction("add")}
       >
-        <CgAddR className="ButtonIcon" />
+        <AddCircleOutlineIcon className="ButtonIcon" />
       </div>
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currBorderColor}
         setCurrColorContex={changeCurrBorderColor}
         setCurrColorContexFin={changeCurrBorderColorFin}
-        IconObj={MdOutlineBorderColor}
+        IconObj={BorderColorOutlinedIcon}
       />
 
-      <ColorSelector 
+      <ColorSelector
         currColorContex={currFillColor}
         setCurrColorContex={changeCurrFillColor}
         setCurrColorContexFin={changeCurrFillColorFin}
-        IconObj={MdOutlineFormatColorFill}
+        IconObj={FormatColorFillIcon}
       />
     </div>
-  )
-}
+  );
+};
 
 const ControlPanel = () => {
   // use useContext to access the functions & values from the provider
@@ -349,7 +380,7 @@ const ControlPanel = () => {
     currFillColor,
     changeCurrFillColor,
     changeCurrFillColorFin,
-    currTextColor, 
+    currTextColor,
     changeCurrTextColor,
     changeCurrTextColorFin,
     currBorderWidth,
@@ -365,21 +396,31 @@ const ControlPanel = () => {
     deleteSelectedShape,
     undo,
     redo,
+
+    // database
+    anchorPoint,
+    shapes,
+    shapesMap,
   } = useContext(ControlContext);
 
+  const { noteId } = useParams();
+  const { setSnackMessage, setOpenSnack } = React.useContext(SnackBarContext);
+  const { authUser } = React.useContext(AuthUserContext);
+
   const ctrlKeyDownHandler = useCallback((e) => {
-    if (e.ctrlKey && e.key === 'z') {
+    if (e.ctrlKey && e.key === "z") {
       // console.log('Undo!!!!!');
       undo();
-    } else if (e.ctrlKey && e.key === 'y') {
+    } else if (e.ctrlKey && e.key === "y") {
       // console.log('Redo!!!!!');
       redo();
-    } 
-  }, [])
-  
+    }
+  }, []);
+
   useEffect(() => {
     window.addEventListener("keydown", ctrlKeyDownHandler, false);
-    return () => window.removeEventListener("keydown", ctrlKeyDownHandler, true);
+    return () =>
+      window.removeEventListener("keydown", ctrlKeyDownHandler, true);
   }, [ctrlKeyDownHandler]);
 
   return (
@@ -395,7 +436,8 @@ const ControlPanel = () => {
             onClick={() => changeCurrMode("grab")}
           >
             {/* <img src={CursorImg} alt="cursor" /> */}
-            <MdOutlineBackHand className="ButtonIcon" />
+
+            <OpenWithOutlinedIcon />
           </div>
 
           {/* textbox */}
@@ -405,19 +447,23 @@ const ControlPanel = () => {
             )}
             onClick={() => changeCurrMode("textbox")}
           >
-            <MdTextFields className="ButtonIcon" />
+            <TextFieldsIcon />
           </div>
 
           {/* line */}
           <div
-            className={["Mode", currMode === "line" ? "Active" : null].join(" ")}
+            className={["Mode", currMode === "line" ? "Active" : null].join(
+              " "
+            )}
             onClick={() => changeCurrMode("line")}
           >
             <img src={LineImg} alt="line" />
           </div>
           {/* rect */}
           <div
-            className={["Mode", currMode === "rect" ? "Active" : null].join(" ")}
+            className={["Mode", currMode === "rect" ? "Active" : null].join(
+              " "
+            )}
             onClick={() => changeCurrMode("rect")}
           >
             <div
@@ -448,7 +494,7 @@ const ControlPanel = () => {
           </div>
           {/* delete */}
           <div className="DeleteButtonsContainer">
-            <button
+            <IconButton
               className="Mode"
               onClick={() => deleteSelectedShape()}
               disabled={!selectedShapeId}
@@ -456,43 +502,104 @@ const ControlPanel = () => {
                 cursor: !selectedShapeId ? "not-allowed" : null,
               }}
             >
-              <FaTrash className="ButtonIcon" />{/* Delete */}
-            </button>{" "}
+              <DeleteIcon />
+            </IconButton>
           </div>
           {/* Undo/Redo */}
           <div className="UndoRedoButtonsContainer">
-            <button className="Mode" onClick={() => undo()} disabled={currCommand <= -1}>
-              <ImUndo className="ButtonIcon" />
-              {/* Undo */}
-            </button>{" "}
-            <button className="Mode" onClick={() => redo()} disabled={currCommand >= lastCommand}>
-              <ImRedo className="ButtonIcon" />
-              {/* Redo */}
-            </button>
+            {/* Undo */}
+            <IconButton
+              className="Mode"
+              onClick={() => undo()}
+              disabled={currCommand <= -1}
+            >
+              <UndoIcon />
+            </IconButton>
+            {/* Redo */}
+            <IconButton
+              className="Mode"
+              onClick={() => redo()}
+              disabled={currCommand >= lastCommand}
+            >
+              <RedoIcon />
+            </IconButton>
           </div>
-
+          <div className="SaveButtonsContainer">
+            <IconButton
+              sx={{ color: "black" }}
+              onClick={() => {
+                updateMindmap(authUser.uid, noteId, {
+                  anchorPoint: anchorPoint,
+                  shapes: shapes,
+                  shapesMap: shapesMap,
+                });
+                setSnackMessage("Saved!");
+                setOpenSnack(true);
+              }}
+            >
+              <SaveIcon />
+            </IconButton>
+          </div>
         </div>
       </div>
-      {currMode === "textbox" || (selectedShapeId && selectedShapeType === "textbox")? 
-        TextBoxUI({currAction, changeCurrAction, 
-                   currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                   currFillColor, changeCurrFillColor, changeCurrFillColorFin, 
-                   currTextColor, changeCurrTextColor, changeCurrTextColorFin}) :
-      currMode === "line" || (selectedShapeId && selectedShapeType === "line")? 
-        LineUI({currAction, changeCurrAction, currBorderColor, changeCurrBorderColor,
-                currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin}) :  
-      currMode === "rect" || (selectedShapeId && selectedShapeType === "rect")? 
-        RectUI({currAction, changeCurrAction, currFillColor, changeCurrFillColor,
-                currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                currFillColor, changeCurrFillColor, changeCurrFillColorFin,}) : 
-      currMode === "ellipse" || (selectedShapeId && selectedShapeType === "ellipse")? 
-        EllipseUI({currAction, changeCurrAction, currFillColor, changeCurrFillColor,
-                   currBorderColor, changeCurrBorderColor, changeCurrBorderColorFin,
-                   currFillColor, changeCurrFillColor, changeCurrFillColorFin,}) : null }
+      {currMode === "textbox" ||
+      (selectedShapeId && selectedShapeType === "textbox")
+        ? TextBoxUI({
+            currAction,
+            changeCurrAction,
+            currBorderColor,
+            changeCurrBorderColor,
+            changeCurrBorderColorFin,
+            currFillColor,
+            changeCurrFillColor,
+            changeCurrFillColorFin,
+            currTextColor,
+            changeCurrTextColor,
+            changeCurrTextColorFin,
+          })
+        : currMode === "line" ||
+          (selectedShapeId && selectedShapeType === "line")
+        ? LineUI({
+            currAction,
+            changeCurrAction,
+            currBorderColor,
+            changeCurrBorderColor,
+            currBorderColor,
+            changeCurrBorderColor,
+            changeCurrBorderColorFin,
+          })
+        : currMode === "rect" ||
+          (selectedShapeId && selectedShapeType === "rect")
+        ? RectUI({
+            currAction,
+            changeCurrAction,
+            currFillColor,
+            changeCurrFillColor,
+            currBorderColor,
+            changeCurrBorderColor,
+            changeCurrBorderColorFin,
+            currFillColor,
+            changeCurrFillColor,
+            changeCurrFillColorFin,
+          })
+        : currMode === "ellipse" ||
+          (selectedShapeId && selectedShapeType === "ellipse")
+        ? EllipseUI({
+            currAction,
+            changeCurrAction,
+            currFillColor,
+            changeCurrFillColor,
+            currBorderColor,
+            changeCurrBorderColor,
+            changeCurrBorderColorFin,
+            currFillColor,
+            changeCurrFillColor,
+            changeCurrFillColorFin,
+          })
+        : null}
       {/* <div className="Details">
         <ColorSelector />
       </div> */}
-      
     </div>
   );
 };

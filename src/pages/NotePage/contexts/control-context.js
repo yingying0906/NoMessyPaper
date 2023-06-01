@@ -28,13 +28,14 @@ const controlContext = createContext({
   anchorPoint: {},
   shapes: [],
   shapesMap: {},
+
   addShape: () => {},
   moveShape: () => {},
   moveShapeFin: () => {},
   grabLayer: () => {},
   resizeShape: () => {},
   resizeShapeFin: () => {},
-  
+
   selectedShapeId: "", // a string or undefined
   selectedShapeType: "", // a string or undefined
   currCommand: -1,
@@ -45,6 +46,8 @@ const controlContext = createContext({
 
   undo: () => {},
   redo: () => {},
+
+  getInfoFromDB: () => {},
 });
 
 export default controlContext;

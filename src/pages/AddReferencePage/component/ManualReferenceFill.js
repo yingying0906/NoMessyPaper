@@ -25,7 +25,7 @@ const infoFields = [
   {
     label: "Author",
     state: "author",
-    required: true,
+    required: false,
     type: "text",
   },
   {
@@ -37,13 +37,13 @@ const infoFields = [
   {
     label: "Year",
     state: "year",
-    required: true,
+    required: false,
     type: "number",
   },
   {
     label: "Journal",
     state: "journal",
-    required: true,
+    required: false,
     type: "text",
   },
   {

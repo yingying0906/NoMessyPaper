@@ -10,6 +10,12 @@ import { selectShadowId } from "../../../shared/util";
 import { setRef } from "@mui/material";
 import { FaPen } from "react-icons/fa";
 
+import { AuthUserContext } from "../../../../../auth/AuthUserContext";
+import { ReferenceContext } from "../../../../../database/ReferenceContext";
+import { useParams } from "react-router-dom";
+import { updateMindmap } from "../../../../../database/controlDatabase";
+import { SnackBarContext } from "../../../../../containers/SnackBars/SnackBarContext";
+
 const SVGLayer = () => {
   const {
     currMode,
@@ -30,7 +36,25 @@ const SVGLayer = () => {
     grabLayer,
     selectedShapeId,
     selectShape,
+    getInfoFromDB,
   } = useContext(ControlContext);
+
+  const { authUser } = useContext(AuthUserContext);
+  const { noteId } = useParams();
+  const { mindmaps } = useContext(ReferenceContext);
+
+  useEffect(() => {
+    if (authUser === null) return;
+    const mindmapCurrent = mindmaps.find((mindmap) => mindmap.id === noteId);
+
+    if (mindmapCurrent !== undefined) {
+      getInfoFromDB(
+        mindmapCurrent.shapesMap,
+        mindmapCurrent.shapes,
+        mindmapCurrent.anchorPoint
+      );
+    }
+  }, [authUser, noteId, mindmaps]);
 
   // use useState to set elements in the React state directly
   // the first element of the list is the state value
@@ -50,7 +74,10 @@ const SVGLayer = () => {
 
   const [resizing, setResizing] = useState(-1);
   const [resizingShape, setResizingShape] = useState(undefined);
-  const [resInitPoint, setResInitPoint] = useState({ x: undefined, y: undefined });
+  const [resInitPoint, setResInitPoint] = useState({
+    x: undefined,
+    y: undefined,
+  });
   // const [resCurrPoint, setResCurrPoint] = useState({ x: undefined, y: undefined });
 
   const [grabbing, setGrabbing] = useState(false);
@@ -64,24 +91,30 @@ const SVGLayer = () => {
     setResizingShape(
       shapesMap[shapes.filter((shapeId) => shapeId === selectedShapeId)[0]]
     );
-  }
+  };
 
   const handleMouseDown = (e) => {
     console.log("Mode: " + currMode + " , Act: " + currAction);
     // if (currMode !== "select") {
-    if(currAction === 'add'){ 
-      if(e.target.nodeName === "TEXTAREA") return;
+    if (currAction === "add") {
+      if (e.target.nodeName === "TEXTAREA") return;
       // should create
       setDrawing(true);
-      setInitPoint({ x: e.nativeEvent.offsetX - anchorPoint.x, y: e.nativeEvent.offsetY - anchorPoint.y });
-      setCurrPoint({ x: e.nativeEvent.offsetX - anchorPoint.x, y: e.nativeEvent.offsetY -anchorPoint.y });
+      setInitPoint({
+        x: e.nativeEvent.offsetX - anchorPoint.x,
+        y: e.nativeEvent.offsetY - anchorPoint.y,
+      });
+      setCurrPoint({
+        x: e.nativeEvent.offsetX - anchorPoint.x,
+        y: e.nativeEvent.offsetY - anchorPoint.y,
+      });
       e.preventDefault();
     } else {
       // should select
       if (e.target.nodeName === "svg") {
         // deselect
         selectShape(undefined);
-        if(currMode === "grab"){
+        if (currMode === "grab") {
           setGrabbing(true);
           setMouseDownPoint({
             x: e.nativeEvent.offsetX,
@@ -90,14 +123,18 @@ const SVGLayer = () => {
         }
       } else {
         // select
-        if(e.target.nodeName === "TEXTAREA") {
+        if (e.target.nodeName === "TEXTAREA") {
           // e.target.getAttribute()
           const targetId = e.target.parentNode.id;
           selectShape(targetId);
           setDragging(true);
           setMouseDownPoint({
-            x: Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')),
-            y: Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')),
+            x:
+              Number(e.nativeEvent.offsetX) +
+              Number(e.target.parentNode.getAttribute("x")),
+            y:
+              Number(e.nativeEvent.offsetY) +
+              Number(e.target.parentNode.getAttribute("y")),
           });
           setDraggingShape(
             shapesMap[shapes.filter((shapeId) => shapeId === targetId)[0]]
@@ -114,21 +151,38 @@ const SVGLayer = () => {
             shapesMap[shapes.filter((shapeId) => shapeId === targetId)[0]]
           );
         }
-        
       }
     }
   };
 
   const handleMouseMove = (e) => {
     if (drawing) {
-      if(e.target.nodeName === "TEXTAREA"){
-        setCurrPoint({ x: Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')) - anchorPoint.x, y: Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')) - anchorPoint.y });
-      } else 
-        setCurrPoint({ x: e.nativeEvent.offsetX - anchorPoint.x, y: e.nativeEvent.offsetY - anchorPoint.y });
+      if (e.target.nodeName === "TEXTAREA") {
+        setCurrPoint({
+          x:
+            Number(e.nativeEvent.offsetX) +
+            Number(e.target.parentNode.getAttribute("x")) -
+            anchorPoint.x,
+          y:
+            Number(e.nativeEvent.offsetY) +
+            Number(e.target.parentNode.getAttribute("y")) -
+            anchorPoint.y,
+        });
+      } else
+        setCurrPoint({
+          x: e.nativeEvent.offsetX - anchorPoint.x,
+          y: e.nativeEvent.offsetY - anchorPoint.y,
+        });
     } else if (dragging && draggingShape) {
-      if(e.target.nodeName === "TEXTAREA"){
-        const deltaX = Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')) - mouseDownPoint.x;
-        const deltaY = Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')) - mouseDownPoint.y;
+      if (e.target.nodeName === "TEXTAREA") {
+        const deltaX =
+          Number(e.nativeEvent.offsetX) +
+          Number(e.target.parentNode.getAttribute("x")) -
+          mouseDownPoint.x;
+        const deltaY =
+          Number(e.nativeEvent.offsetY) +
+          Number(e.target.parentNode.getAttribute("y")) -
+          mouseDownPoint.y;
         moveShape({
           initCoords: {
             x: draggingShape.initCoords.x + deltaX,
@@ -154,39 +208,48 @@ const SVGLayer = () => {
           },
         });
       }
-      
-    } else if(resizing !== -1){
+    } else if (resizing !== -1) {
       let deltaX, deltaY;
-      if(e.target.nodeName === "TEXTAREA"){
-        deltaX = Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')) - resInitPoint.x;
-        deltaY = Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')) - resInitPoint.y;
+      if (e.target.nodeName === "TEXTAREA") {
+        deltaX =
+          Number(e.nativeEvent.offsetX) +
+          Number(e.target.parentNode.getAttribute("x")) -
+          resInitPoint.x;
+        deltaY =
+          Number(e.nativeEvent.offsetY) +
+          Number(e.target.parentNode.getAttribute("y")) -
+          resInitPoint.y;
       } else {
         deltaX = e.nativeEvent.offsetX - resInitPoint.x;
         deltaY = e.nativeEvent.offsetY - resInitPoint.y;
       }
       switch (resizing) {
-        case 0:{
+        case 0: {
           // top-left
           let newX = resizingShape.initCoords.x + deltaX;
           let newY = resizingShape.initCoords.y + deltaY;
-          if(currMode !== "line"){
-            if(resizingShape.finalCoords.x - newX < 10) newX = resizingShape.finalCoords.x - 10;    
-            if(resizingShape.finalCoords.y - newY < 10) newY = resizingShape.finalCoords.y - 10;
+          if (currMode !== "line") {
+            if (resizingShape.finalCoords.x - newX < 10)
+              newX = resizingShape.finalCoords.x - 10;
+            if (resizingShape.finalCoords.y - newY < 10)
+              newY = resizingShape.finalCoords.y - 10;
           }
           moveShape({
             initCoords: {
               x: newX,
               y: newY,
-            }
-          })
+            },
+          });
           break;
         }
-        case 1:{
+        case 1: {
           // top-right
           let newX = resizingShape.finalCoords.x + deltaX;
-          if(newX - resizingShape.initCoords.x < 10) newX = resizingShape.initCoords.x + 10;
+          if (newX - resizingShape.initCoords.x < 10)
+            newX = resizingShape.initCoords.x + 10;
           let newY = resizingShape.initCoords.y + deltaY;
-          if(resizingShape.finalCoords.y - newY < 10) newY = resizingShape.finalCoords.y - 10;
+          if (resizingShape.finalCoords.y - newY < 10)
+            newY = resizingShape.finalCoords.y - 10;
           moveShape({
             initCoords: {
               x: resizingShape.initCoords.x,
@@ -196,14 +259,17 @@ const SVGLayer = () => {
               x: newX,
               y: resizingShape.finalCoords.y,
             },
-          })
+          });
           break;
-        } case 2:{
+        }
+        case 2: {
           // bottom-left
           let newX = resizingShape.initCoords.x + deltaX;
-          if(resizingShape.finalCoords.x - newX < 10) newX = resizingShape.finalCoords.x - 10;
+          if (resizingShape.finalCoords.x - newX < 10)
+            newX = resizingShape.finalCoords.x - 10;
           let newY = resizingShape.finalCoords.y + deltaY;
-          if(newY - resizingShape.initCoords.y < 10) newY = resizingShape.initCoords.y + 10;
+          if (newY - resizingShape.initCoords.y < 10)
+            newY = resizingShape.initCoords.y + 10;
           moveShape({
             initCoords: {
               x: newX,
@@ -213,33 +279,34 @@ const SVGLayer = () => {
               x: resizingShape.finalCoords.x,
               y: newY,
             },
-          })
+          });
           break;
         }
-        case 3:{
+        case 3: {
           // bottom-right
           let newX = resizingShape.finalCoords.x + deltaX;
           let newY = resizingShape.finalCoords.y + deltaY;
-          if(currMode !== "line"){
-            if(newX - resizingShape.initCoords.x < 10) newX = resizingShape.initCoords.x + 10;
-            if(newY - resizingShape.initCoords.y < 10) newY = resizingShape.initCoords.y + 10;
+          if (currMode !== "line") {
+            if (newX - resizingShape.initCoords.x < 10)
+              newX = resizingShape.initCoords.x + 10;
+            if (newY - resizingShape.initCoords.y < 10)
+              newY = resizingShape.initCoords.y + 10;
           }
           moveShape({
             finalCoords: {
               x: newX,
               y: newY,
             },
-          })
+          });
           break;
         }
-
-      } 
-    } else if (grabbing){
+      }
+    } else if (grabbing) {
       const deltaX = e.nativeEvent.offsetX - mouseDownPoint.x;
       const deltaY = e.nativeEvent.offsetY - mouseDownPoint.y;
       grabLayer({
         x: anchorPoint.x + deltaX,
-        y: anchorPoint.y + deltaY
+        y: anchorPoint.y + deltaY,
       });
       setMouseDownPoint({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
     }
@@ -247,7 +314,7 @@ const SVGLayer = () => {
 
   const handleMouseUp = (e) => {
     // if (currMode !== "select") {
-    if(currAction === "add") {
+    if (currAction === "add") {
       changeCurrAction("none");
       if (!(initPoint.x === currPoint.x && initPoint.y === currPoint.y)) {
         // check if it's too small
@@ -285,10 +352,16 @@ const SVGLayer = () => {
       setCurrPoint({ x: undefined, y: undefined });
     } else {
       if (dragging && draggingShape) {
-        if(e.target.nodeName === "TEXTAREA"){
-          const deltaX = Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')) - mouseDownPoint.x;
-          const deltaY = Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')) - mouseDownPoint.y;
-    
+        if (e.target.nodeName === "TEXTAREA") {
+          const deltaX =
+            Number(e.nativeEvent.offsetX) +
+            Number(e.target.parentNode.getAttribute("x")) -
+            mouseDownPoint.x;
+          const deltaY =
+            Number(e.nativeEvent.offsetY) +
+            Number(e.target.parentNode.getAttribute("y")) -
+            mouseDownPoint.y;
+
           moveShapeFin({
             initCoords: {
               x: draggingShape.initCoords.x + deltaX,
@@ -302,7 +375,7 @@ const SVGLayer = () => {
         } else {
           const deltaX = e.nativeEvent.offsetX - mouseDownPoint.x;
           const deltaY = e.nativeEvent.offsetY - mouseDownPoint.y;
-    
+
           moveShapeFin({
             initCoords: {
               x: draggingShape.initCoords.x + deltaX,
@@ -314,23 +387,31 @@ const SVGLayer = () => {
             },
           });
         }
-      } else if(resizing !== -1){
+      } else if (resizing !== -1) {
         let deltaX, deltaY;
-        if(e.target.nodeName === "TEXTAREA"){
-          deltaX = Number(e.nativeEvent.offsetX) + Number(e.target.parentNode.getAttribute('x')) - resInitPoint.x;
-          deltaY = Number(e.nativeEvent.offsetY) + Number(e.target.parentNode.getAttribute('y')) - resInitPoint.y;
+        if (e.target.nodeName === "TEXTAREA") {
+          deltaX =
+            Number(e.nativeEvent.offsetX) +
+            Number(e.target.parentNode.getAttribute("x")) -
+            resInitPoint.x;
+          deltaY =
+            Number(e.nativeEvent.offsetY) +
+            Number(e.target.parentNode.getAttribute("y")) -
+            resInitPoint.y;
         } else {
           deltaX = e.nativeEvent.offsetX - resInitPoint.x;
           deltaY = e.nativeEvent.offsetY - resInitPoint.y;
         }
         switch (resizing) {
-          case 0:{
+          case 0: {
             // top-left
             let newX = resizingShape.initCoords.x + deltaX;
             let newY = resizingShape.initCoords.y + deltaY;
-            if(currMode !== "line"){
-              if(resizingShape.finalCoords.x - newX < 10) newX = resizingShape.finalCoords.x - 10;    
-              if(resizingShape.finalCoords.y - newY < 10) newY = resizingShape.finalCoords.y - 10;
+            if (currMode !== "line") {
+              if (resizingShape.finalCoords.x - newX < 10)
+                newX = resizingShape.finalCoords.x - 10;
+              if (resizingShape.finalCoords.y - newY < 10)
+                newY = resizingShape.finalCoords.y - 10;
             }
             moveShapeFin({
               initCoords: {
@@ -341,15 +422,17 @@ const SVGLayer = () => {
                 x: resizingShape.finalCoords.x,
                 y: resizingShape.finalCoords.y,
               },
-            })
+            });
             break;
           }
-          case 1:{
+          case 1: {
             // top-right
             let newX = resizingShape.finalCoords.x + deltaX;
-            if(newX - resizingShape.initCoords.x < 10) newX = resizingShape.initCoords.x + 10;
+            if (newX - resizingShape.initCoords.x < 10)
+              newX = resizingShape.initCoords.x + 10;
             let newY = resizingShape.initCoords.y + deltaY;
-            if(resizingShape.finalCoords.y - newY < 10) newY = resizingShape.finalCoords.y - 10;
+            if (resizingShape.finalCoords.y - newY < 10)
+              newY = resizingShape.finalCoords.y - 10;
             moveShapeFin({
               initCoords: {
                 x: resizingShape.initCoords.x,
@@ -359,14 +442,17 @@ const SVGLayer = () => {
                 x: newX,
                 y: resizingShape.finalCoords.y,
               },
-            })
+            });
             break;
-          } case 2:{
+          }
+          case 2: {
             // bottom-left
             let newX = resizingShape.initCoords.x + deltaX;
-            if(resizingShape.finalCoords.x - newX < 10) newX = resizingShape.finalCoords.x - 10;
+            if (resizingShape.finalCoords.x - newX < 10)
+              newX = resizingShape.finalCoords.x - 10;
             let newY = resizingShape.finalCoords.y + deltaY;
-            if(newY - resizingShape.initCoords.y < 10) newY = resizingShape.initCoords.y + 10;
+            if (newY - resizingShape.initCoords.y < 10)
+              newY = resizingShape.initCoords.y + 10;
             moveShapeFin({
               initCoords: {
                 x: newX,
@@ -376,16 +462,18 @@ const SVGLayer = () => {
                 x: resizingShape.finalCoords.x,
                 y: newY,
               },
-            })
+            });
             break;
           }
-          case 3:{
+          case 3: {
             // bottom-right
             let newX = resizingShape.finalCoords.x + deltaX;
             let newY = resizingShape.finalCoords.y + deltaY;
-            if(currMode !== "line"){
-              if(newX - resizingShape.initCoords.x < 10) newX = resizingShape.initCoords.x + 10;
-              if(newY - resizingShape.initCoords.y < 10) newY = resizingShape.initCoords.y + 10;
+            if (currMode !== "line") {
+              if (newX - resizingShape.initCoords.x < 10)
+                newX = resizingShape.initCoords.x + 10;
+              if (newY - resizingShape.initCoords.y < 10)
+                newY = resizingShape.initCoords.y + 10;
             }
             moveShapeFin({
               initCoords: {
@@ -396,19 +484,18 @@ const SVGLayer = () => {
                 x: newX,
                 y: newY,
               },
-            })
+            });
             break;
           }
-
         }
-      } else if(grabbing){
+      } else if (grabbing) {
         const deltaX = e.nativeEvent.offsetX - mouseDownPoint.x;
         const deltaY = e.nativeEvent.offsetY - mouseDownPoint.y;
         grabLayer({
           x: anchorPoint.x + deltaX,
-          y: anchorPoint.y + deltaY
+          y: anchorPoint.y + deltaY,
         });
-      }   
+      }
       setDragging(false);
       setDraggingShape(undefined);
       setMouseDownPoint({ x: undefined, y: undefined });
@@ -446,7 +533,7 @@ const SVGLayer = () => {
           setDragging(false);
           setDraggingShape(undefined);
           setMouseDownPoint({ x: undefined, y: undefined });
-        } else if(resizing !== -1){
+        } else if (resizing !== -1) {
           moveShape({
             initCoords: {
               x: resizingShape.initCoords.x,
@@ -489,13 +576,13 @@ const SVGLayer = () => {
     //   selectedShapeId && selectedShapeId === id
     //     ? `url(#${selectShadowId})`
     //     : null;
-    const selected = (selectedShapeId && selectedShapeId === id)
+    const selected = selectedShapeId && selectedShapeId === id;
 
     switch (shapeData.type) {
       case "textbox": {
         return React.createElement(TextBox, {
-          x: Math.min(initCoords.x, finalCoords.x)+anchorPoint.x,
-          y: Math.min(initCoords.y, finalCoords.y)+anchorPoint.y,
+          x: Math.min(initCoords.x, finalCoords.x) + anchorPoint.x,
+          y: Math.min(initCoords.y, finalCoords.y) + anchorPoint.y,
           width: Math.abs(finalCoords.x - initCoords.x),
           height: Math.abs(finalCoords.y - initCoords.y),
           fillColor,
@@ -512,10 +599,10 @@ const SVGLayer = () => {
       }
       case "line": {
         return React.createElement(Line, {
-          x1: initCoords.x+anchorPoint.x,
-          y1: initCoords.y+anchorPoint.y,
-          x2: finalCoords.x+anchorPoint.x,
-          y2: finalCoords.y+anchorPoint.y,
+          x1: initCoords.x + anchorPoint.x,
+          y1: initCoords.y + anchorPoint.y,
+          x2: finalCoords.x + anchorPoint.x,
+          y2: finalCoords.y + anchorPoint.y,
           borderColor,
           borderWidth,
           id,
@@ -526,8 +613,8 @@ const SVGLayer = () => {
       }
       case "rect": {
         return React.createElement(Rect, {
-          x: Math.min(initCoords.x, finalCoords.x)+anchorPoint.x,
-          y: Math.min(initCoords.y, finalCoords.y)+anchorPoint.y,
+          x: Math.min(initCoords.x, finalCoords.x) + anchorPoint.x,
+          y: Math.min(initCoords.y, finalCoords.y) + anchorPoint.y,
           width: Math.abs(finalCoords.x - initCoords.x),
           height: Math.abs(finalCoords.y - initCoords.y),
           fillColor,
@@ -540,8 +627,8 @@ const SVGLayer = () => {
         });
       }
       case "ellipse": {
-        let x = Math.min(finalCoords.x, initCoords.x)+anchorPoint.x;
-        let y = Math.min(finalCoords.y, initCoords.y)+anchorPoint.y;
+        let x = Math.min(finalCoords.x, initCoords.x) + anchorPoint.x;
+        let y = Math.min(finalCoords.y, initCoords.y) + anchorPoint.y;
         let w = Math.abs(finalCoords.x - initCoords.x);
         let h = Math.abs(finalCoords.y - initCoords.y);
 
@@ -597,6 +684,28 @@ const SVGLayer = () => {
     }
   };
 
+  // auto save per 60 seconds
+  const { setOpenSnack, setSnackMessage } = useContext(SnackBarContext);
+  useEffect(() => {
+    const saveNoteContent = () => {
+      console.log("autosaving");
+      setSnackMessage("Autosaving");
+      setOpenSnack(true);
+      const obj = {
+        shapesMap: shapesMap,
+        shapes: shapes,
+        anchorPoint: anchorPoint,
+      };
+      updateMindmap(authUser.uid, noteId, obj);
+    };
+
+    const autosaveTimer = setInterval(saveNoteContent, 60000);
+
+    return () => {
+      clearInterval(autosaveTimer);
+    };
+  }, [shapesMap, shapes, anchorPoint]);
+
   return (
     <svg
       id="workspace-svg"
@@ -605,7 +714,9 @@ const SVGLayer = () => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      style={currMode === "grab" ? {cursor: '-webkit-grab', cursor: 'grab'} : {}}
+      style={
+        currMode === "grab" ? { cursor: "-webkit-grab", cursor: "grab" } : {}
+      }
     >
       {/* shadow */}
       <filter

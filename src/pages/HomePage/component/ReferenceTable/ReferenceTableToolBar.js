@@ -1,11 +1,12 @@
 import * as React from "react";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 
 import { deleteReference } from "../../../../database/controlDatabase";
 import { BackDropContext } from "../backDrop/BackDropContext";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import IosShareIcon from "@mui/icons-material/IosShare";
 
 const handleDeleteMultiple = (rowSelected, refs, authUser) => {
   if (window.confirm("Are you sure you want to delete these references?")) {
@@ -78,21 +79,25 @@ const RefTableToolBar = (props) => {
       </IconButton>
       {rowSelected.length > 0 && (
         <>
-          <IconButton
-            onClick={() =>
-              handleDeleteMultiple(rowSelected, references, authUser)
-            }
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Delete selected">
+            <IconButton
+              onClick={() =>
+                handleDeleteMultiple(rowSelected, references, authUser)
+              }
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
 
-          <IconButton
-            onClick={() =>
-              handleExportMultiple(rowSelected, references, authUser)
-            }
-          >
-            Export
-          </IconButton>
+          <Tooltip title="Export to BibTeX">
+            <IconButton
+              onClick={() =>
+                handleExportMultiple(rowSelected, references, authUser)
+              }
+            >
+              <IosShareIcon />
+            </IconButton>
+          </Tooltip>
         </>
       )}
     </div>

@@ -12,6 +12,8 @@ import { db, storage } from "../firebase";
 const writeNewReference = (UID, Item) => {
   const reference = ref(db, "referenceList/" + UID);
   const newReference = push(reference, Item);
+  writeNewMindmap(UID, newReference.key);
+
   return newReference.key;
 };
 
@@ -37,8 +39,6 @@ const editReference = (UID, RefId, Item) => {
 
 // delete reference
 const deleteReference = async (UID, RefId, RefFileName) => {
-  const reference = ref(db, `referenceList/${UID}/${RefId}`);
-
   // delete pdf
   if (RefFileName !== undefined) {
     const storageRef = sRef(
@@ -56,9 +56,20 @@ const deleteReference = async (UID, RefId, RefFileName) => {
   }
 
   // delete json
+  const reference = ref(db, `referenceList/${UID}/${RefId}`);
   await remove(reference)
     .then(() => {
       console.log("location removed");
+    })
+    .catch((error) => {
+      console.log("error: ", error);
+    });
+
+  // delete mindmap
+  const mindmapReference = ref(db, `mindmapList/${UID}/${RefId}`);
+  await remove(mindmapReference)
+    .then(() => {
+      console.log("mindmap removed");
     })
     .catch((error) => {
       console.log("error: ", error);
@@ -98,12 +109,41 @@ const getFileUrl = async (UID, RefId, fileName) => {
   const storageRef = sRef(storage, `referenceList/${UID}/${RefId}/${fileName}`);
 
   try {
-    const url = await getDownloadURL(storageRef);
-    return url;
+    await getDownloadURL(storageRef)
+      .then((url) => {
+        return url;
+      })
+      .catch((error) => {
+        console.log("error1: ", error);
+        return null;
+      });
   } catch (error) {
-    console.log("error: ", error);
+    console.log("error2: ", error);
     return null;
   }
+};
+
+// mindmap
+const writeNewMindmap = (UID, RefId) => {
+  const item = {
+    anchorPoint: {},
+    shapes: [],
+    shapesMap: {},
+  };
+  const reference = ref(db, `mindmapList/${UID}/${RefId}`);
+  set(reference, item)
+    .then(() => {
+      console.log("new mindmap created");
+    })
+    .catch((error) => {
+      console.log("error: ", error);
+    });
+};
+
+const updateMindmap = (UID, RefID, Obj) => {
+  console.log(UID, RefID, Obj);
+  const reference = ref(db, `mindmapList/${UID}/${RefID}`);
+  set(reference, Obj);
 };
 
 export {
@@ -114,4 +154,6 @@ export {
   editReference,
   getFileUrl,
   enterLink,
+  writeNewMindmap,
+  updateMindmap,
 };

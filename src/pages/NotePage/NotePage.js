@@ -1,13 +1,15 @@
 import "./NotePage.css";
 
-import * as React from "react";
+import { Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { Document, Page } from "react-pdf";
-import { getFileUrl } from "../../database/controlDatabase";
+import { getFileUrl, updateMindmap } from "../../database/controlDatabase";
 
 import { AuthUserContext } from "../../auth/AuthUserContext";
 import { ReferenceContext } from "../../database/ReferenceContext";
+import { SnackBarContext } from "../../containers/SnackBars/SnackBarContext";
+import controlContext from "./contexts/control-context";
 
 import { Grid } from "@mui/material";
 import PdfViewer from "./PdfViewer/PdfViewer";
@@ -15,40 +17,42 @@ import PdfViewer from "./PdfViewer/PdfViewer";
 import NoteBord from "./NoteBord";
 
 const NotePage = () => {
-  const [pdfUrl, setPdfUrl] = React.useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const { noteId } = useParams();
   const { authUser } = React.useContext(AuthUserContext);
   const { references } = React.useContext(ReferenceContext);
 
-  const { noteId } = useParams();
-  console.log("noteId: ", noteId);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (authUser === null) return;
     const note = references.find((ref) => ref.id === noteId);
     if (note !== undefined) {
-      getFileUrl(authUser.uid, noteId, note.fileName).then((url) => {
-        setPdfUrl(url);
-      });
+      getFileUrl(authUser.uid, noteId, note.fileName)
+        .then((url) => {
+          setPdfUrl(url);
+        })
+        .catch((err) => {
+          console.log("no pdf");
+        });
     }
-
-    console.log("pdfUrl: ", pdfUrl);
-  }, [noteId]);
+  }, [authUser, noteId, references]);
 
   return (
     <div>
       <h1>NotePage</h1>
-      <Grid container spacing={1}>
-        {pdfUrl && (
-          <Grid item xs={6}>
-            <PdfViewer pdfUrl={pdfUrl} />
-          </Grid>
-        )}
+      <div style={{ height: "80vh" }}>
+        <Grid container spacing={1} sx={{ height: "100%" }}>
+          {pdfUrl && (
+            <Grid item xs={6}>
+              <PdfViewer pdfUrl={pdfUrl} />
+            </Grid>
+          )}
 
-        <Grid item xs={6}>
-          {/* WORKSAPCE */}
-          <NoteBord className="note-space"/>
+          <Grid item xs={pdfUrl ? 6 : 12}>
+            {/* WORKSPACE */}
+            <NoteBord className="note-space" />
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </div>
   );
 };

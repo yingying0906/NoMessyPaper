@@ -12,8 +12,8 @@ import ChangeBorderColorCommandObject from "./shared/commandObjects/ChangeBorder
 import ChangeBorderWidthCommandObject from "./shared/commandObjects/ChangeBorderWidthCommandObject";
 import AddShapeCommandObject from "./shared/commandObjects/AddShapeCommandObject";
 import DeleteShapeCommandObject from "./shared/commandObjects/DeleteShapeCommandObject";
-import MoveShapeCommandObject from "./shared/commandObjects/MoveShapeCommandObject"
-import ChangeTextValueCommandObject from "./shared/commandObjects/ChangeTextValueCommandObject"
+import MoveShapeCommandObject from "./shared/commandObjects/MoveShapeCommandObject";
+import ChangeTextValueCommandObject from "./shared/commandObjects/ChangeTextValueCommandObject";
 
 // import "./App.css";
 
@@ -24,9 +24,8 @@ let oriBorderColor = defaultValues.borderColor;
 let oriFillColor = defaultValues.fillColor;
 let oriTextColor = defaultValues.textColor;
 let oriPosition = null;
-let oriTextValue = '';
+let oriTextValue = "";
 let isMoved = false;
-
 
 class NoteBord extends Component {
   state = {
@@ -37,10 +36,10 @@ class NoteBord extends Component {
     currBorderWidth: defaultValues.borderWidth,
     currFillColor: defaultValues.fillColor,
     currTextColor: defaultValues.textColor,
-    currTextValue: '',
+    currTextValue: "",
 
     // workspace
-    anchorPoint: { x: 0, y: 0},
+    anchorPoint: { x: 0, y: 0 },
     shapes: [],
     shapesMap: {},
     selectedShapeId: undefined,
@@ -75,35 +74,33 @@ class NoteBord extends Component {
 
   registerExecution = (commandObject) => {
     let commandList = [...this.state.commandList];
-    if(this.state.commandList[this.state.currCommand+1]){
-      commandList.splice(this.state.currCommand+1);
-    } 
+    if (this.state.commandList[this.state.currCommand + 1]) {
+      commandList.splice(this.state.currCommand + 1);
+    }
     commandList.push(commandObject);
-    const lastCommand = this.state.currCommand +1;
-    const currCommand = this.state.currCommand +1;
-    this.setState({commandList, currCommand, lastCommand});
+    const lastCommand = this.state.currCommand + 1;
+    const currCommand = this.state.currCommand + 1;
+    this.setState({ commandList, currCommand, lastCommand });
   };
 
   undo = () => {
-    if(this.state.currCommand >= 0){
-      this.changeCurrMode('grab');
+    if (this.state.currCommand >= 0) {
+      this.changeCurrMode("grab");
       // this.changeCurrMode('select');
       this.state.commandList[this.state.currCommand].undo();
-      const currCommand = this.state.currCommand-1;
-      this.setState({currCommand});
+      const currCommand = this.state.currCommand - 1;
+      this.setState({ currCommand });
     }
   };
 
   redo = () => {
-
-    if(this.state.currCommand < this.state.lastCommand){
-      this.changeCurrMode('grab');
+    if (this.state.currCommand < this.state.lastCommand) {
+      this.changeCurrMode("grab");
       // this.changeCurrMode('select');
-      this.state.commandList[this.state.currCommand+1].redo();
-      const currCommand = this.state.currCommand+1;
-      this.setState({currCommand});
+      this.state.commandList[this.state.currCommand + 1].redo();
+      const currCommand = this.state.currCommand + 1;
+      this.setState({ currCommand });
     }
-      
   };
 
   // add the shapeId to the array, and the shape itself to the map
@@ -120,19 +117,19 @@ class NoteBord extends Component {
     selectedObj = {
       selectedShapeId: id,
       ...shapeData,
-    }
+    };
     this.undoHandler.selectedObj = selectedObj;
     let cmdObj = new AddShapeCommandObject(this.undoHandler);
     cmdObj.execute();
     this.selectShape(undefined);
   };
 
-  UndoAddShape = (selectedShapeId,) => {
+  UndoAddShape = (selectedShapeId) => {
     let shapesMap = { ...this.state.shapesMap };
     shapesMap[selectedShapeId].visible = false;
     selectedObj = null;
     this.setState({ shapesMap, selectedShapeId: undefined });
-  }
+  };
 
   RedoAddShape = (selectedShapeId) => {
     let shapesMap = { ...this.state.shapesMap };
@@ -143,14 +140,14 @@ class NoteBord extends Component {
     };
     this.setState({ shapesMap, selectedShapeId: selectedShapeId });
     this.selectShape(selectedShapeId);
-  }
+  };
 
   // get the shape by its id, and update its properties
   updateShape = (shapeId, newData) => {
     let shapesMap = { ...this.state.shapesMap };
     let targetShape = shapesMap[shapeId];
     shapesMap[shapeId] = { ...targetShape, ...newData };
-    selectedObj = {...selectedObj, ...newData};
+    selectedObj = { ...selectedObj, ...newData };
     this.setState({ shapesMap });
   };
 
@@ -162,13 +159,13 @@ class NoteBord extends Component {
   };
 
   moveShapeFin = (newData) => {
-    if(!isMoved) return;
+    if (!isMoved) return;
     isMoved = false;
     if (this.state.selectedShapeId) {
       selectedObj = {
         ...selectedObj,
         ...oriPosition,
-      }
+      };
       oriPosition = newData;
       this.undoHandler.selectedObj = selectedObj;
       let cmdObj = new MoveShapeCommandObject(this.undoHandler);
@@ -178,19 +175,18 @@ class NoteBord extends Component {
   };
 
   grabLayer = (newAnchor) => {
-    this.setState({anchorPoint: newAnchor});
+    this.setState({ anchorPoint: newAnchor });
   };
 
   DoMoveShape = (selectedShapeId, newData) => {
     selectedObj = {
       ...selectedObj,
       ...newData,
-    }
+    };
     oriPosition = newData;
     this.updateShape(selectedShapeId, newData);
     this.selectShape(selectedShapeId);
-  }
-
+  };
 
   // deleting a shape sets its visibility to false, rather than removing it
   deleteSelectedShape = () => {
@@ -199,7 +195,7 @@ class NoteBord extends Component {
     selectedObj = {
       selectedShapeId: this.state.selectedShapeId,
       ...shapesMap[this.state.selectedShapeId],
-    }
+    };
     this.undoHandler.selectedObj = selectedObj;
     let cmdObj = new DeleteShapeCommandObject(this.undoHandler);
     cmdObj.execute();
@@ -260,7 +256,7 @@ class NoteBord extends Component {
     this.setState({ currBorderColor: borderColor });
     selectedObj.borderColor = borderColor;
     this.updateShape(selectedShapeId, { borderColor });
-  }
+  };
 
   changeCurrBorderWidth = (borderWidth) => {
     this.setState({ currBorderWidth: borderWidth });
@@ -279,7 +275,7 @@ class NoteBord extends Component {
       cmdObj.execute(borderWidth);
       this.updateShape(this.state.selectedShapeId, { borderWidth });
     }
-  }
+  };
 
   changeCurrBorderWidthState = (selectedShapeId, borderWidth) => {
     this.selectShape(selectedShapeId);
@@ -287,7 +283,7 @@ class NoteBord extends Component {
     oriBorderWidth = borderWidth;
     selectedObj.borderWidth = borderWidth;
     this.updateShape(selectedShapeId, { borderWidth });
-  }
+  };
 
   changeCurrFillColor = (fillColor) => {
     this.setState({ currFillColor: fillColor });
@@ -298,7 +294,10 @@ class NoteBord extends Component {
 
   changeCurrFillColorFin = (fillColor) => {
     this.setState({ currFillColor: fillColor });
-    if (this.state.selectedShapeId && this.state.shapesMap[selectedObj.selectedShapeId].type !== 'line') {
+    if (
+      this.state.selectedShapeId &&
+      this.state.shapesMap[selectedObj.selectedShapeId].type !== "line"
+    ) {
       selectedObj.fillColor = oriFillColor;
       oriFillColor = fillColor;
       this.undoHandler.selectedObj = selectedObj;
@@ -308,7 +307,7 @@ class NoteBord extends Component {
     }
   };
 
-  changeCurrFillColorState = (selectedShapeId, fillColor) =>{
+  changeCurrFillColorState = (selectedShapeId, fillColor) => {
     this.selectShape(selectedShapeId);
     this.setState({ currFillColor: fillColor });
     oriFillColor = fillColor;
@@ -333,9 +332,9 @@ class NoteBord extends Component {
       cmdObj.execute(textColor);
       this.updateShape(this.state.selectedShapeId, { textColor });
     }
-  }
+  };
 
-  changeCurrTextColorState = (selectedShapeId, textColor) =>{
+  changeCurrTextColorState = (selectedShapeId, textColor) => {
     this.selectShape(selectedShapeId);
     this.setState({ currTextColor: textColor });
 
@@ -363,26 +362,33 @@ class NoteBord extends Component {
     this.selectShape(selectedShapeId);
     oriTextValue = textValue;
     selectedObj.textValue = textValue;
-    this.updateShape(selectedShapeId, {textValue});
-    
-  }
+    this.updateShape(selectedShapeId, { textValue });
+  };
 
   selectShape = (id) => {
     this.setState({ selectedShapeId: id });
     if (id) {
-      const { type, borderColor, borderWidth, fillColor, textColor, textValue } = this.state.shapesMap[
-        this.state.shapes.filter((shapeId) => shapeId === id)[0]
-      ];
+      const {
+        type,
+        borderColor,
+        borderWidth,
+        fillColor,
+        textColor,
+        textValue,
+      } =
+        this.state.shapesMap[
+          this.state.shapes.filter((shapeId) => shapeId === id)[0]
+        ];
       this.setState({ selectedShapeType: type });
       this.setState({ currMode: type });
       this.setState({ currAction: "select" });
-      if(type === 'line'){
+      if (type === "line") {
         this.setState({
           currBorderColor: borderColor,
           currBorderWidth: borderWidth,
           // currFillColor: fillColor,
         });
-      } else if(type === 'textbox'){
+      } else if (type === "textbox") {
         this.setState({
           currBorderColor: borderColor,
           // currBorderWidth: borderWidth,
@@ -397,25 +403,38 @@ class NoteBord extends Component {
           currFillColor: fillColor,
         });
       }
-      
+
       selectedObj = {
         selectedShapeId: id,
         ...this.state.shapesMap[
           this.state.shapes.filter((shapeId) => shapeId === id)[0]
-        ]
-      }
+        ],
+      };
       oriBorderWidth = borderWidth;
       oriPosition = {
         initCoords: selectedObj.initCoords,
         finalCoords: selectedObj.finalCoords,
-      }
+      };
     } else {
       selectedObj = null;
-      if(this.state.currAction !== "add") {
+      if (this.state.currAction !== "add") {
         this.setState({ currAction: "none" });
       }
     }
-  }
+  };
+
+  // database
+  getInfoFromDB = (shapesMapSent, shapesSent, anchorPointSent) => {
+    let shapesMap = { ...this.state.shapesMap };
+    shapesMap = shapesMapSent;
+    this.setState({ shapesMap });
+    let shapes = [...this.state.shapes];
+    shapes = shapesSent;
+    this.setState({ shapes });
+    let anchorPoint = { ...this.state.anchorPoint };
+    anchorPoint = anchorPointSent;
+    this.setState({ anchorPoint });
+  };
 
   render() {
     const {
@@ -439,58 +458,60 @@ class NoteBord extends Component {
     // update the context with the functions and values defined above and from state
     // and pass it to the structure below it (control panel and workspace)
     return (
-        <ControlContext.Provider
-          value={{
-            currMode,
-            changeCurrMode: this.changeCurrMode,
-            currAction,
-            changeCurrAction: this.changeCurrAction,
+      <ControlContext.Provider
+        value={{
+          currMode,
+          changeCurrMode: this.changeCurrMode,
+          currAction,
+          changeCurrAction: this.changeCurrAction,
 
-            currBorderColor,
-            changeCurrBorderColor: this.changeCurrBorderColor,
-            changeCurrBorderColorFin: this.changeCurrBorderColorFin,
+          currBorderColor,
+          changeCurrBorderColor: this.changeCurrBorderColor,
+          changeCurrBorderColorFin: this.changeCurrBorderColorFin,
 
-            currBorderWidth,
-            changeCurrBorderWidth: this.changeCurrBorderWidth,
-            changeCurrBorderWidthFin: this.changeCurrBorderWidthFin,
-            
-            currFillColor,
-            changeCurrFillColor: this.changeCurrFillColor,
-            changeCurrFillColorFin: this.changeCurrFillColorFin,
+          currBorderWidth,
+          changeCurrBorderWidth: this.changeCurrBorderWidth,
+          changeCurrBorderWidthFin: this.changeCurrBorderWidthFin,
 
-            currTextColor,
-            changeCurrTextColor: this.changeCurrTextColor,
-            changeCurrTextColorFin: this.changeCurrTextColorFin,
+          currFillColor,
+          changeCurrFillColor: this.changeCurrFillColor,
+          changeCurrFillColorFin: this.changeCurrFillColorFin,
 
-            currTextValue,
-            changeTextValueFin: this.changeTextValueFin,
+          currTextColor,
+          changeCurrTextColor: this.changeCurrTextColor,
+          changeCurrTextColorFin: this.changeCurrTextColorFin,
 
-            anchorPoint,
-            shapes,
-            shapesMap,
-            addShape: this.addShape,
-            moveShape: this.moveShape,
-            moveShapeFin: this.moveShapeFin,
-            grabLayer: this.grabLayer,
-            selectedShapeId,
-            selectedShapeType,
-            currCommand,
-            lastCommand,
-            commandList,
-            selectShape: this.selectShape,
-            deleteSelectedShape: this.deleteSelectedShape,
+          currTextValue,
+          changeTextValueFin: this.changeTextValueFin,
 
-            undo: this.undo,
-            redo: this.redo,
-          }}
-        >
-          <div className="note-space">
-            <ControlPanel/>
-            <Workspace />
-          </div>
-          
-          {/* <CommandList/> */}
-        </ControlContext.Provider>
+          anchorPoint,
+          shapes,
+          shapesMap,
+          addShape: this.addShape,
+          moveShape: this.moveShape,
+          moveShapeFin: this.moveShapeFin,
+          grabLayer: this.grabLayer,
+          selectedShapeId,
+          selectedShapeType,
+          currCommand,
+          lastCommand,
+          commandList,
+          selectShape: this.selectShape,
+          deleteSelectedShape: this.deleteSelectedShape,
+
+          undo: this.undo,
+          redo: this.redo,
+
+          getInfoFromDB: this.getInfoFromDB,
+        }}
+      >
+        <div className="note-space">
+          <ControlPanel />
+          <Workspace />
+        </div>
+
+        {/* <CommandList/> */}
+      </ControlContext.Provider>
     );
   }
 }

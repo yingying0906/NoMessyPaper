@@ -44,7 +44,15 @@
 .Control .DeleteButtonsContainer,
 .Control .UndoRedoButtonsContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+}
+
+.SaveButtonsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 10px;
 }
 
 .DeleteButtonsContainer button,
@@ -55,6 +63,8 @@
   justify-content: center;
   align-items: center;
   font-size: 1.05rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .ButtonIcon {
@@ -119,4 +129,8 @@
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
+}
+
+.ControlPanel button {
+  padding: 0;
 }

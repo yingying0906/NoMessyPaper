@@ -9,7 +9,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const SnackBarCustom = () => {
-  const { openSnack, handleSnackClose } = React.useContext(SnackBarContext);
+  const { openSnack, handleSnackClose, snackMessage } =
+    React.useContext(SnackBarContext);
+
   return (
     <Snackbar
       open={openSnack}
@@ -21,7 +23,7 @@ const SnackBarCustom = () => {
         severity="success"
         sx={{ width: "100%" }}
       >
-        Reference successfully submitted.
+        {snackMessage}
       </Alert>
     </Snackbar>
   );
