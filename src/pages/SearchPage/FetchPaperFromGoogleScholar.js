@@ -11,8 +11,8 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
-import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
-import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
+import SkipPreviousOutlinedIcon from "@mui/icons-material/SkipPreviousOutlined";
+import SkipNextOutlinedIcon from "@mui/icons-material/SkipNextOutlined";
 import { AuthUserContext } from "../../auth/AuthUserContext";
 import AddSearchBackDrop from "./AddSearchPaper/AddSearchBackDrop";
 import { FormStateContext } from "../../database/FormStateContext.js";
@@ -62,7 +62,13 @@ const FetchPaperFromGoogleScholar = ({
       }
     };
     fetchData();
-  }, [searchKeyword, setSearchFromYear, searchToYear, searchNumOfResults, startNum]);
+  }, [
+    searchKeyword,
+    setSearchFromYear,
+    searchToYear,
+    searchNumOfResults,
+    startNum,
+  ]);
 
   useEffect(() => {
     setLoading(false);
@@ -114,8 +120,8 @@ const FetchPaperFromGoogleScholar = ({
 
   function updateToPrePage() {
     setStartNum(function (pre) {
-      return pre - parseInt(searchNumOfResults)
-    })
+      return pre - parseInt(searchNumOfResults);
+    });
     if (scrollRef.current) {
       scrollRef.current.scrollTop = 0;
     }
@@ -123,8 +129,8 @@ const FetchPaperFromGoogleScholar = ({
 
   function updateToNextPage() {
     setStartNum(function (pre) {
-      return pre + parseInt(searchNumOfResults)
-    })
+      return pre + parseInt(searchNumOfResults);
+    });
     if (scrollRef.current) {
       scrollRef.current.scrollTop = 0;
     }
@@ -198,29 +204,38 @@ const FetchPaperFromGoogleScholar = ({
                   </Paper>
                 );
               })}
-            <Grid sx={{ margin: "10px", marginBottom: "10px", justifyContent: "space-evenly", display: "flex" }}>
-              {startNum !== 0 &&
+            <Grid
+              sx={{
+                margin: "10px",
+                marginBottom: "10px",
+                justifyContent: "space-evenly",
+                display: "flex",
+              }}
+            >
+              {startNum !== 0 && (
                 <Box>
                   <Button
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     startIcon={<SkipPreviousOutlinedIcon />}
-                    onClick={updateToPrePage}>
+                    onClick={updateToPrePage}
+                  >
                     previous page
                   </Button>
                 </Box>
-              }
-              {startNum + parseInt(searchNumOfResults) < searchInformation &&
+              )}
+              {startNum + parseInt(searchNumOfResults) < searchInformation && (
                 <Box>
                   <Button
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     endIcon={<SkipNextOutlinedIcon />}
-                    onClick={updateToNextPage}>
+                    onClick={updateToNextPage}
+                  >
                     next page
                   </Button>
                 </Box>
-              }
+              )}
             </Grid>
           </div>
         </div>
