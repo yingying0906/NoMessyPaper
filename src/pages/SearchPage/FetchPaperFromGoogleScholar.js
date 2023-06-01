@@ -1,5 +1,6 @@
 import {
   Backdrop,
+  Box,
   Button,
   Container,
   Grid,
@@ -7,9 +8,11 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InsertLinkOutlinedIcon from "@mui/icons-material/InsertLinkOutlined";
 import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
+import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
+import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import { AuthUserContext } from "../../auth/AuthUserContext";
 import AddSearchBackDrop from "./AddSearchPaper/AddSearchBackDrop";
 import { FormStateContext } from "../../database/FormStateContext.js";
@@ -21,6 +24,9 @@ const FetchPaperFromGoogleScholar = ({
   searchNumOfResults,
 }) => {
   const [paperData, setPaperData] = useState(null);
+  const [searchInformation, setSearchInformation] = useState(null);
+  const [startNum, setStartNum] = useState(0);
+  const scrollRef = useRef(null);
 
   const { apiKey } = React.useContext(AuthUserContext);
   useEffect(() => {
@@ -28,7 +34,7 @@ const FetchPaperFromGoogleScholar = ({
       try {
         // if want to search paper => use this  因為只能搜尋 100次/月 ， api_key=可以切換成自己的api_key (；´ﾟωﾟ｀人)
         const response = await fetch(
-          `/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&api_key=${apiKey}`
+          `/paper/search.json?engine=google_scholar&q=${searchKeyword}&hl=en&as_ylo=${setSearchFromYear}&as_yhi=${searchToYear}&num=${searchNumOfResults}&start=${startNum}&api_key=${apiKey}`
         )
           .then((response) => response.json())
           .catch((error) => {
@@ -49,14 +55,14 @@ const FetchPaperFromGoogleScholar = ({
           "https://serpapi.com/searches/bb6e2fcc452dcb5b/6464ec487f8361e3061a9c72.json",
           { mode: "cors" }
         ).then((response) => response.json()); */
-
+        setSearchInformation([response.search_information.total_results]);
         setPaperData([...response.organic_results]);
       } catch (error) {
         console.error("Error fetching paper data:", error);
       }
     };
     fetchData();
-  }, [searchKeyword, setSearchFromYear, searchToYear, searchNumOfResults]);
+  }, [searchKeyword, setSearchFromYear, searchToYear, searchNumOfResults, startNum]);
 
   useEffect(() => {
     setLoading(false);
@@ -106,6 +112,24 @@ const FetchPaperFromGoogleScholar = ({
     setOpenBackDrop(false);
   };
 
+  function updateToPrePage() {
+    setStartNum(function (pre) {
+      return pre - parseInt(searchNumOfResults)
+    })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }
+
+  function updateToNextPage() {
+    setStartNum(function (pre) {
+      return pre + parseInt(searchNumOfResults)
+    })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }
+
   return (
     <>
       <Container>
@@ -127,7 +151,7 @@ const FetchPaperFromGoogleScholar = ({
               Search " {searchKeyword} " Results
             </Typography>
           </div>
-          <Grid sx={{ overflowY: "auto", maxHeight: "72vh" }}>
+          <div style={{ overflowY: "auto", maxHeight: "72vh" }} ref={scrollRef}>
             {paperData &&
               paperData.map((data, index) => {
                 return (
@@ -174,7 +198,31 @@ const FetchPaperFromGoogleScholar = ({
                   </Paper>
                 );
               })}
-          </Grid>
+            <Grid sx={{ margin: "10px", marginBottom: "10px", justifyContent: "space-evenly", display: "flex" }}>
+              {startNum !== 0 &&
+                <Box>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    startIcon={<SkipPreviousOutlinedIcon />}
+                    onClick={updateToPrePage}>
+                    previous page
+                  </Button>
+                </Box>
+              }
+              {startNum + parseInt(searchNumOfResults) < searchInformation &&
+                <Box>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    endIcon={<SkipNextOutlinedIcon />}
+                    onClick={updateToNextPage}>
+                    next page
+                  </Button>
+                </Box>
+              }
+            </Grid>
+          </div>
         </div>
       </Container>
 
