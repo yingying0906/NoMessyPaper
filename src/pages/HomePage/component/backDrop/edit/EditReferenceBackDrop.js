@@ -9,7 +9,7 @@ const EditReferenceBackDrop = (props) => {
   return (
     <div
       style={{
-        width: "40vw",
+        width: "60vw",
         backgroundColor: "white",
         padding: "20px",
         borderRadius: "10px",

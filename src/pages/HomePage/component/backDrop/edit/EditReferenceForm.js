@@ -8,25 +8,84 @@ import {
 
 import { TextField, Button, IconButton } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import EditCategoryChoose from "./EditCategoryChoose";
+
+import { ReferenceContext } from "../../../../../database/ReferenceContext";
+
+const infoFields = [
+  {
+    label: "Author",
+    state: "author",
+    required: false,
+    type: "text",
+  },
+  {
+    label: "Title",
+    state: "title",
+    required: true,
+    type: "text",
+  },
+  {
+    label: "Year",
+    state: "year",
+    required: false,
+    type: "number",
+  },
+  {
+    label: "Journal",
+    state: "journal",
+    required: false,
+    type: "text",
+  },
+  {
+    label: "Tags",
+    state: "tags",
+    required: false,
+    type: "text",
+  },
+  {
+    label: "Link",
+    state: "link",
+    required: false,
+    type: "url",
+  },
+];
 
 const EditReferenceForm = () => {
-  const [author, setAuthor] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [year, setYear] = React.useState("");
-  const [journal, setJournal] = React.useState("");
-  const [tags, setTags] = React.useState("");
-  const [selectedFile, setSelectedFile] = React.useState(null);
-
   const { authUser } = React.useContext(AuthUserContext);
   const { editingFile, setOpenEdit } = React.useContext(BackDropContext);
 
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [editFormState, setEditFormState] = React.useState({
+    author: "",
+    title: "",
+    year: "",
+    journal: "",
+    tags: "",
+    link: "",
+  });
+  const { categories, setCategories } = React.useContext(ReferenceContext);
+
   React.useEffect(() => {
     if (editingFile) {
-      setAuthor(editingFile.author || "");
-      setTitle(editingFile.title || "");
-      setYear(editingFile.year || "");
-      setJournal(editingFile.journal || "");
-      setTags(editingFile.tags || "");
+      setEditFormState({
+        author: editingFile.author || "",
+        title: editingFile.title || "",
+        year: editingFile.year || "",
+        journal: editingFile.journal || "",
+        tags: editingFile.tags || "",
+        link: editingFile.link || "",
+      });
+
+      //loop editingfile and setCategories checked
+      setCategories(
+        categories.map((category) => {
+          if (editingFile.categories?.includes(category.refID)) {
+            return { ...category, checked: true };
+          }
+          return { ...category, checked: false };
+        })
+      );
     }
   }, [editingFile]);
 
@@ -34,13 +93,24 @@ const EditReferenceForm = () => {
     e.preventDefault();
     setOpenEdit(false);
     // reference info
+
+    const { author, title, year, journal, tags, link } = editFormState;
+
+    const writeCategories = categories
+      .filter((cat) => cat.checked)
+      .map((cat) => cat.refID);
+
+    console.log("hi", writeCategories);
+
     const ref = {
       author: author,
       title: title,
       year: year,
       journal: journal,
       tags: tags,
+      link: link,
       fileName: selectedFile ? selectedFile.name : null,
+      categories: writeCategories,
     };
     editReference(authUser.uid, editingFile.id, ref);
 
@@ -51,107 +121,71 @@ const EditReferenceForm = () => {
     setSelectedFile(null);
   };
 
+  const handleTextChange = (e, stateKey) => {
+    setEditFormState((prevState) => ({
+      ...prevState,
+      [stateKey]: e.target.value,
+    }));
+  };
+
   return (
-    <div style={{ padding: "20px 40px" }}>
+    <div>
       <form autoComplete="off" onSubmit={submitRef}>
-        <TextField
-          disabled={authUser == null}
-          label="Author"
-          onChange={(e) => setAuthor(e.target.value)}
-          variant="outlined"
-          color="primary"
-          type="text"
-          sx={{
-            mb: 2,
-          }}
-          fullWidth
-          value={author}
-        />
-        <TextField
-          disabled={authUser == null}
-          label="Title"
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          variant="outlined"
-          color="primary"
-          type="text"
-          value={title}
-          fullWidth
-          sx={{
-            mb: 2,
-          }}
-        />
-        <TextField
-          disabled={authUser == null}
-          label="Year"
-          onChange={(e) => setYear(e.target.value)}
-          variant="outlined"
-          color="primary"
-          type="number"
-          value={year}
-          fullWidth
-          sx={{
-            mb: 2,
-          }}
-        />
-        <TextField
-          disabled={authUser == null}
-          label="Journal"
-          onChange={(e) => setJournal(e.target.value)}
-          variant="outlined"
-          color="primary"
-          type="text"
-          value={journal}
-          fullWidth
-          sx={{
-            mb: 2,
-          }}
-        />
-        <TextField
-          disabled={authUser == null}
-          label="tags"
-          onChange={(e) => setTags(e.target.value)}
-          variant="outlined"
-          color="primary"
-          type="text"
-          value={tags}
-          fullWidth
-          sx={{
-            mb: 2,
-          }}
-        />
-
-        {editingFile.fileName ? (
-          <div style={{ color: "black" }}>
-            {editingFile && editingFile.fileName}
-            <IconButton></IconButton>
-          </div>
-        ) : (
-          <Button fullWidth sx={{ mb: 2 }} variant="outlined">
-            <label className="custom-file-upload">
-              Upload PDF (not necessary)
-              <input
-                type="file"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
+        <div className="formBox">
+          <div>
+            {infoFields.map((field) => (
+              <TextField
+                size="small"
+                key={field.state}
+                disabled={authUser == null}
+                label={field.label}
+                onChange={(e) => handleTextChange(e, field.state)}
+                required={field.required}
+                variant="outlined"
+                color="primary"
+                type={field.type}
+                sx={{
+                  mb: 2,
+                }}
+                fullWidth
+                value={editFormState[field.state]}
               />
-            </label>
-          </Button>
-        )}
+            ))}
 
-        {selectedFile && (
-          <div style={{ marginBottom: "4px" }}>
-            <span style={{ color: "black" }}>{selectedFile.name}</span>
-            <IconButton onClick={() => setSelectedFile(null)}>
-              <ClearIcon />
-            </IconButton>
+            {editingFile.fileName ? (
+              <div style={{ color: "black" }}>
+                {editingFile && editingFile.fileName}
+              </div>
+            ) : (
+              <Button fullWidth sx={{ mb: 2 }} variant="outlined">
+                <label className="custom-file-upload">
+                  Upload PDF (not necessary)
+                  <input
+                    type="file"
+                    onChange={(e) => setSelectedFile(e.target.files[0])}
+                  />
+                </label>
+              </Button>
+            )}
+
+            {selectedFile && (
+              <div style={{ marginBottom: "4px" }}>
+                <span style={{ color: "black" }}>{selectedFile.name}</span>
+                <IconButton onClick={() => setSelectedFile(null)}>
+                  <ClearIcon />
+                </IconButton>
+              </div>
+            )}
           </div>
-        )}
+          <div>
+            <EditCategoryChoose />
+          </div>
+        </div>
 
         <Button
           disabled={authUser == null}
           type="submit"
           variant="contained"
-          fullWidth
           sx={{
             mb: 2,
           }}
