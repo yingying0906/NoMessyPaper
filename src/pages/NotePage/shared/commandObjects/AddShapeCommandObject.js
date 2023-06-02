@@ -1,5 +1,5 @@
 import CommandObject from "./CommandObject";
-import { selectedObj } from "../../NoteBord";
+import { selectedObj } from "../../NotePage";
 
 
 export default class AddShapeCommandObject extends CommandObject {

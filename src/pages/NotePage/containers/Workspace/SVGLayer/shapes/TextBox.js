@@ -56,6 +56,7 @@ const TextBox = ({
             color: textColor,
             border: `solid ${borderWidth}px ${borderColor}`,
           }}
+          // disabled={true}
           onFocus={handleFocus}
           onBlur={handleBlur}
         ></textarea>
