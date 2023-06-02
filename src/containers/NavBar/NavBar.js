@@ -7,38 +7,36 @@ import { NavElement } from "./component/NavElement";
 import { AuthUserContext } from "../../auth/AuthUserContext";
 
 const NavBar = (props) => {
-  const { authUser } = React.useContext(AuthUserContext);
+	const { authUser } = React.useContext(AuthUserContext);
 
-  return (
-    <div>
-      <AppBar position="relative" style={{ padding: "0px 20px" }}>
-        <Toolbar disableGutters>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flex: "1 0 auto",
-            }}
-          >
-            <NavElement />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flex: "1 0 auto",
-              justifyContent: "flex-end",
-            }}
-          >
-            <div style={{ marginRight: "5px" }}>
-              Welcome Back, {authUser ? authUser.email : "Guest"}
-            </div>
-            <UserSetting />
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+	return (
+		<AppBar position="sticky" style={{ padding: "0px 20px" }}>
+			<Toolbar disableGutters>
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						flex: "1 0 auto",
+					}}
+				>
+					<NavElement />
+				</Box>
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						flex: "1 0 auto",
+						justifyContent: "flex-end",
+					}}
+				>
+					<div style={{ marginRight: "5px" }}>
+						Welcome Back, {authUser ? authUser.email : "Guest"}
+					</div>
+					<UserSetting />
+				</Box>
+			</Toolbar>
+		</AppBar>
+	);
 };
 
 export default NavBar;

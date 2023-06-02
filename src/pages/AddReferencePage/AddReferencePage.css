@@ -1,16 +1,23 @@
 .AddReferencePage {
-  padding: 2vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.AddReferencePage > div {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: 60vw;
 }
 
 input[type="file"] {
-  display: none;
+	display: none;
 }
 
 .custom-file-upload {
-  width: 100%;
-  cursor: pointer;
+	width: 100%;
+	cursor: pointer;
 }

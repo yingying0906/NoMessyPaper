@@ -1,36 +1,36 @@
 .formBox {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
 }
 
 .formBox > div {
-  width: 50%;
-  padding: 2% 5%;
-  margin: 5% 0%;
-  min-height: 100%;
+	width: 50%;
+	padding: 2% 5%;
+	margin: 2% 0%;
+	min-height: 100%;
 }
 
 .formBox > div:first-child {
-  border-right: 1px solid #ccc;
+	border-right: 1px solid #ccc;
 }
 
 .newCategory {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  margin: 5% 0%;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	width: 100%;
+	margin: 5% 0%;
 }
 
 .newCategory input {
-  display: inline-block;
-  margin: 0;
+	display: inline-block;
+	margin: 0;
 }
 
 .newCategory div {
-  margin: 0;
+	margin: 0;
 }
