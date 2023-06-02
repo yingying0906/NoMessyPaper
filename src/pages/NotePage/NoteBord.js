@@ -369,7 +369,6 @@ class NoteBord extends Component {
     this.updateShape(selectedShapeId, { textValue });
   };
 
-
   addShape = (shapeData) => {
     let shapes = [...this.state.shapes];
     let shapesMap = { ...this.state.shapesMap };
@@ -451,8 +450,9 @@ class NoteBord extends Component {
   setShapes = (sentShapes) => {
     // shapes = []
     // shapes[x] = 'id'
-    this.setState({shapes: sentShapes});
-  }
+    console.log("setShapes", sentShapes);
+    this.setState({ shapes: sentShapes });
+  };
 
   setShapesmap = (sentShapemap) => {
     // shapesMap[id] = {
@@ -467,16 +467,18 @@ class NoteBord extends Component {
     //     textValue: '',
     //     ...
     // }
-    this.setState({shapesMap: sentShapemap});
-  }
+    console.log("setShapesmap", sentShapemap);
+    this.setState({ shapesMap: sentShapemap });
+  };
 
   setAnchor = (sentAnchor) => {
     // anchorPoint: {
     //     x: anchorPoint.x,
     //     y: anchorPoint.y,
     // };
-    this.setState({anchorPoint: sentAnchor});
-  }
+    console.log("setAnchor", sentAnchor);
+    this.setState({ anchorPoint: sentAnchor });
+  };
 
   render() {
     const {
@@ -543,6 +545,10 @@ class NoteBord extends Component {
 
           undo: this.undo,
           redo: this.redo,
+
+          setShapes: this.setShapes,
+          setShapesmap: this.setShapesmap,
+          setAnchor: this.setAnchor,
         }}
       >
         <div className="note-space">

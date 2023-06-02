@@ -17,24 +17,46 @@ import PdfViewer from "./PdfViewer/PdfViewer";
 import NoteBord from "./NoteBord";
 
 const NotePage = () => {
+  const { noteId } = useParams();
   const [pdfUrl, setPdfUrl] = React.useState(null);
   const { authUser } = React.useContext(AuthUserContext);
-  const { references } = React.useContext(ReferenceContext);
+  const { references, mindmaps } = React.useContext(ReferenceContext);
+  const { setShapes, setShapesmap, setAnchor } =
+    React.useContext(controlContext);
 
-  const { noteId } = useParams();
   console.log("noteId: ", noteId);
 
   React.useEffect(() => {
+    // get pdf url
     if (authUser === null) return;
     const note = references.find((ref) => ref.id === noteId);
-    if (note !== undefined) {
-      getFileUrl(authUser.uid, noteId, note.fileName).then((url) => {
-        setPdfUrl(url);
-      });
+    if (note !== undefined && note !== null) {
+      getFileUrl(authUser.uid, noteId, note.fileName)
+        .then((url) => {
+          setPdfUrl(url);
+        })
+        .catch((err) => {
+          console.log("url erro", err);
+          setPdfUrl(null);
+        });
     }
 
     console.log("pdfURL: ", pdfUrl);
-  }, [noteId]);
+
+    // get mindmap info
+    const mindmapNow = mindmaps.find((mindmap) => mindmap.id === noteId);
+    console.log("mindmapNow: ", mindmapNow);
+
+    if (mindmapNow === undefined || mindmapNow === null) {
+      setShapes([]);
+      setShapesmap({});
+      setAnchor(null);
+    } else {
+      setShapes(mindmapNow.shapes);
+      setShapesmap(mindmapNow.shapesMap);
+      setAnchor(mindmapNow.anchorPoint);
+    }
+  }, []);
 
   return (
     <div>
