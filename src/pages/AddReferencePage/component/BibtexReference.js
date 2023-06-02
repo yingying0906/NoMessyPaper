@@ -51,6 +51,7 @@ const BibtexReference = () => {
       bibtex: "",
       tags: "",
       selectedFile: null,
+      link: "",
     });
     setCategories(
       categories.map((cat) => {
@@ -137,7 +138,7 @@ const BibtexReference = () => {
             <TextField
               size="small"
               disabled={authUser == null}
-              label="tags"
+              label="Tags"
               onChange={(e) => {
                 const value = e.target.value;
                 setFormState((prevState) => ({
@@ -149,6 +150,26 @@ const BibtexReference = () => {
               color="primary"
               type="text"
               value={formState.tags}
+              fullWidth
+              sx={{
+                mb: 2,
+              }}
+            />
+            <TextField
+              size="small"
+              disabled={authUser == null}
+              label="Link"
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormState((prevState) => ({
+                  ...prevState,
+                  link: value,
+                }));
+              }}
+              variant="outlined"
+              color="primary"
+              type="text"
+              value={formState.link}
               fullWidth
               sx={{
                 mb: 2,
