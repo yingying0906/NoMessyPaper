@@ -11,38 +11,51 @@ import ManualReferenceFill from "./component/ManualReferenceFill";
 import BibtexReference from "./component/BibtexReference";
 
 const AddReferencePage = () => {
-	const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("1");
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-	return (
-		<div className="AddReferencePage">
-			<h2 style={{ textAlign: "start", marginTop: "1%" }}>
-				Add Reference
-			</h2>
-			<div>
-				<TabContext value={value}>
-					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-						<TabList
-							onChange={handleChange}
-							aria-label="lab API tabs example"
-						>
-							<Tab label="Plain Text" value="1" />
-							<Tab label="Bibtex" value="2" />
-						</TabList>
-					</Box>
-					<TabPanel value="1" style={{ padding: 0 }}>
-						<ManualReferenceFill ref={null} type={null} />
-					</TabPanel>
-					<TabPanel value="2">
-						<BibtexReference />
-					</TabPanel>
-				</TabContext>
-			</div>
-		</div>
-	);
+  return (
+    <div className="AddReferencePage">
+      <h2 style={{ textAlign: "start", marginTop: "1%" }}>Add Reference</h2>
+      <div>
+        <TabContext value={value}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              width: "100%",
+            }}
+          >
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
+            >
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="Plain Text" value="1" />
+                <Tab label="Bibtex" value="2" />
+              </TabList>
+            </Box>
+          </div>
+
+          <TabPanel value="1" style={{ padding: 0 }}>
+            <ManualReferenceFill ref={null} type={null} />
+          </TabPanel>
+          <TabPanel value="2">
+            <BibtexReference />
+          </TabPanel>
+        </TabContext>
+      </div>
+    </div>
+  );
 };
 
 export default AddReferencePage;
