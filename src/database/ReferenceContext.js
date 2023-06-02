@@ -8,7 +8,7 @@ import controlContext from "../pages/NotePage/contexts/control-context";
 export const ReferenceContext = React.createContext();
 
 export const ReferenceProvider = ({ children }) => {
-  const { authUser } = React.useContext(AuthUserContext);
+  const { authUser, setAuthUser } = React.useContext(AuthUserContext);
 
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -88,7 +88,7 @@ export const ReferenceProvider = ({ children }) => {
     return () => {
       referenceListener();
     };
-  }, [authUser]);
+  }, [authUser, setAuthUser]);
 
   const [mindmaps, setMindmaps] = React.useState([]);
 
@@ -108,7 +108,7 @@ export const ReferenceProvider = ({ children }) => {
 
         console.log("mindmap retrieved");
       } else {
-        setReferences([]);
+        setMindmaps([]);
       }
 
       setLoading(false);
