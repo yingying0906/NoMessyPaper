@@ -38,33 +38,38 @@ let oriTextValue = "";
 let isMoved = false;
 
 const NotePage = () => {
-  const { noteId } = useParams();
-  const [pdfUrl, setPdfUrl] = React.useState(null);
-  const { authUser } = React.useContext(AuthUserContext);
-  const { references, mindmaps } = React.useContext(ReferenceContext);
+  /* For board */
   // const { setShapes, setShapesmap, setAnchor } =
   //   React.useContext(controlContext);
 
   // controls
-  const [ currMode, setCurrMode ] = React.useState(defaultValues.mode);
-  const [ currAction, setCurrAction ] = React.useState(defaultValues.action);
-  const [ currBorderColor, setCurrBorderColor ] = React.useState(defaultValues.borderColor);
-  const [ currBorderWidth, setCurrBorderWidth ] = React.useState(defaultValues.borderWidth);
-  const [ currFillColor, setCurrFillColor ] = React.useState(defaultValues.fillColor);
-  const [ currTextColor, setCurrTextColor ] = React.useState(defaultValues.textColor);
-  const [ currTextValue, setCurrTextValue ] = React.useState("");
+  const [currMode, setCurrMode] = React.useState(defaultValues.mode);
+  const [currAction, setCurrAction] = React.useState(defaultValues.action);
+  const [currBorderColor, setCurrBorderColor] = React.useState(
+    defaultValues.borderColor
+  );
+  const [currBorderWidth, setCurrBorderWidth] = React.useState(
+    defaultValues.borderWidth
+  );
+  const [currFillColor, setCurrFillColor] = React.useState(
+    defaultValues.fillColor
+  );
+  const [currTextColor, setCurrTextColor] = React.useState(
+    defaultValues.textColor
+  );
+  const [currTextValue, setCurrTextValue] = React.useState("");
 
   // workspace
-  const [ anchorPoint, setAnchorPoint ] = React.useState({ x: 0, y: 0 });
-  const [ shapes, setShapes ] = React.useState([]);
-  const [ shapesMap, setShapesMap ] = React.useState({});
-  const [ selectedShapeId, setSelectedShapeId ] = React.useState(undefined);
-  const [ selectedShapeType, setSelectedShapeType ] = React.useState(undefined);
+  const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
+  const [shapes, setShapes] = React.useState([]);
+  const [shapesMap, setShapesMap] = React.useState({});
+  const [selectedShapeId, setSelectedShapeId] = React.useState(undefined);
+  const [selectedShapeType, setSelectedShapeType] = React.useState(undefined);
 
   // handling undo/redo
-  const [ commandList, setCommandList ] = React.useState([]);
-  const [ currCommand, setCurrCommand ] = React.useState(-1);
-  const [ lastCommand, setLastCommand ] = React.useState(-1);
+  const [commandList, setCommandList] = React.useState([]);
+  const [currCommand, setCurrCommand] = React.useState(-1);
+  const [lastCommand, setLastCommand] = React.useState(-1);
 
   const registerExecution = (commandObject) => {
     let _commandList = [...commandList];
@@ -73,8 +78,8 @@ const NotePage = () => {
     }
     _commandList.push(commandObject);
     setCommandList(_commandList);
-    setCurrCommand(currCommand+1);
-    setLastCommand(currCommand+1);
+    setCurrCommand(currCommand + 1);
+    setLastCommand(currCommand + 1);
     // const lastCommand = this.state.currCommand + 1;
     // const currCommand = this.state.currCommand + 1;
     // this.setState({ commandList, currCommand, lastCommand });
@@ -91,10 +96,7 @@ const NotePage = () => {
         fillColor,
         textColor,
         textValue,
-      } =
-        shapesMap[
-          shapes.filter((shapeId) => shapeId === id)[0]
-        ];
+      } = shapesMap[shapes.filter((shapeId) => shapeId === id)[0]];
       setSelectedShapeType(type);
       // this.setState({ selectedShapeType: type });
       setCurrMode(type);
@@ -113,7 +115,7 @@ const NotePage = () => {
         setCurrBorderWidth(borderWidth);
         setCurrFillColor(fillColor);
         setCurrTextColor(textColor);
-        
+
         // this.setState({
         //   currBorderColor: borderColor,
         //   // currBorderWidth: borderWidth,
@@ -134,9 +136,7 @@ const NotePage = () => {
 
       selectedObj = {
         selectedShapeId: id,
-        ...shapesMap[
-          shapes.filter((shapeId) => shapeId === id)[0]
-        ],
+        ...shapesMap[shapes.filter((shapeId) => shapeId === id)[0]],
       };
       oriBorderWidth = borderWidth;
       oriPosition = {
@@ -445,12 +445,10 @@ const NotePage = () => {
     updateShape(_selectedShapeId, { textValue });
   };
 
-  
-
   /*
-  * pass this undoHandler into command object constructors:
-  *  e.g. let cmdObj = new ChangeFillColorCommandObject(this.undoHandler);
-  */
+   * pass this undoHandler into command object constructors:
+   *  e.g. let cmdObj = new ChangeFillColorCommandObject(this.undoHandler);
+   */
   const undoHandler = {
     registerExecution: registerExecution,
     selectedObj: selectedObj,
@@ -464,13 +462,20 @@ const NotePage = () => {
     DoChangeTextValue: DoChangeTextValue,
   };
 
+  /* for pdf */
+  const { noteId } = useParams();
 
-  console.log("noteId: ", noteId);
+  const [pdfUrl, setPdfUrl] = React.useState(null);
+  const { authUser } = React.useContext(AuthUserContext);
+  const { references, mindmaps } = React.useContext(ReferenceContext);
+
+  const noteName = references.find((ref) => ref.id === noteId)?.title;
 
   React.useEffect(() => {
     // get pdf url
     if (authUser === null) return;
     const note = references.find((ref) => ref.id === noteId);
+
     if (note !== undefined && note !== null) {
       getFileUrl(authUser.uid, noteId, note.fileName)
         .then((url) => {
@@ -489,29 +494,42 @@ const NotePage = () => {
     console.log("mindmapNow: ", mindmapNow);
 
     if (mindmapNow === undefined || mindmapNow === null) {
+      console.log("no mindmap");
       setShapes([]);
       setShapesMap({});
-      setAnchorPoint(null);
+      setAnchorPoint({ x: 0, y: 0 });
     } else {
       setShapes(mindmapNow.shapes);
       setShapesMap(mindmapNow.shapesMap);
       setAnchorPoint(mindmapNow.anchorPoint);
     }
-    console.log('500');
-    console.log(shapes);
-    console.log(shapesMap);
-    console.log(anchorPoint);
-
   }, []);
 
-  console.log('507');
-  console.log(shapes);
-  console.log(shapesMap);
-  console.log(anchorPoint);
+  // auto save per 60 seconds
+  const { setOpenSnack, setSnackMessage } = React.useContext(SnackBarContext);
+  useEffect(() => {
+    const saveNoteContent = () => {
+      console.log("autosaving");
+      setSnackMessage("Autosaving");
+      setOpenSnack(true);
+      const obj = {
+        shapesMap: shapesMap,
+        shapes: shapes,
+        anchorPoint: anchorPoint,
+      };
+      updateMindmap(authUser.uid, noteId, obj);
+    };
+
+    const autosaveTimer = setInterval(saveNoteContent, 60000);
+
+    return () => {
+      clearInterval(autosaveTimer);
+    };
+  }, [shapesMap, shapes, anchorPoint]);
 
   return (
     <div>
-      <h1>NotePage</h1>
+      <h1 style={{ padding: "10px 10px" }}>{noteName}</h1>
       <div style={{ height: "80vh" }}>
         <Grid container spacing={1} sx={{ height: "100%" }}>
           {pdfUrl && (
@@ -573,7 +591,6 @@ const NotePage = () => {
             >
               <NoteBord className="note-space" />
             </ControlContext.Provider>
-            
           </Grid>
         </Grid>
       </div>

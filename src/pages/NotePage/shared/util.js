@@ -8,12 +8,12 @@ export const genId = () => {
 export const selectShadowId = "select-shadow";
 
 export const defaultValues = {
-  mode: "line", // 'grab', 'line', 'rect', 'ellipse',
-  action: "none",   // 'none', 'select', 'add'
+  mode: "textbox", // 'grab', 'line', 'rect', 'ellipse',
+  action: "none", // 'none', 'select', 'add'
   // borderColor: "#000",
-  borderColor: "rgba(0,0,0,1)",
-  borderWidth: 3,
+  borderColor: "rgba(100,100,100,1)",
+  borderWidth: 1,
   // fillColor: "#9fce63",
-  fillColor: "rgba(80,227,194,1)",
+  fillColor: "rgba(255,255,255,1)",
   textColor: "rgba(0,0,0,1)",
 };
