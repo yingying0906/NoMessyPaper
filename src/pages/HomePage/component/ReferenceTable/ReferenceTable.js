@@ -43,7 +43,7 @@ const ReferenceTable = (props) => {
       return {
         ...column,
         renderCell: (params) => (
-          <div className="wrap-cell">
+          <div className="wrap-cell small-scroll-bar">
             <Tooltip title={params.value}>
               <span>{params.value}</span>
             </Tooltip>

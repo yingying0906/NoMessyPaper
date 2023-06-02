@@ -31,11 +31,13 @@ const columns = [
       const items = params.value ? params.value.split(",") : [];
 
       return (
-        <div>
-          {items.map((item, index) => (
-            <Chip key={index} sx={{ mr: 1 }} label={item.trim()} />
-          ))}
-        </div>
+        <Tooltip title={params.value}>
+          <div className="small-scroll-bar">
+            {items.map((item, index) => (
+              <Chip key={index} sx={{ mr: 1 }} label={item.trim()} />
+            ))}
+          </div>
+        </Tooltip>
       );
     },
   },
@@ -47,7 +49,7 @@ const columns = [
 
     renderCell: (params) => {
       return (
-        <div>
+        <div style={{ overflowX: "scroll" }} className="small-scroll-bar">
           {params.row.link && (
             <Tooltip title="Open Link in New Tab">
               <IconButton onClick={() => enterLink(params.UID, params.row.id)}>

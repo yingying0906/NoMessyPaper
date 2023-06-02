@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+/*scroll bar*/
+.small-scroll-bar {
+  overflow-x: auto;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.small-scroll-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.small-scroll-bar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+.small-scroll-bar::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+}
+
+.small-scroll-bar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
+
+.small-scroll-bar:not(:hover)::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
