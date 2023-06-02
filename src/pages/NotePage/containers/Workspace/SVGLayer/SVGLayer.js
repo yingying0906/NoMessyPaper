@@ -675,6 +675,7 @@ const SVGLayer = () => {
         borderWidth: currBorderWidth,
         fillColor: currFillColor,
         textColor: currTextColor,
+        // new shape don't have init textValue
         textValue: currTextValue,
       });
     }
