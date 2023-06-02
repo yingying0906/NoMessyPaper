@@ -17,7 +17,7 @@
 }
 
 .ControlPanel .Control {
-  height: 50px;
+  /* height: 50px; */
   padding: 2px 10px;
   margin: 5px 0px;
   display: flex;
@@ -48,11 +48,11 @@
   align-items: center;
 }
 
-.SaveButtonsContainer {
+.Control .SaveButtonsContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0px 10px;
+  /* margin: 0px 10px; */
 }
 
 .DeleteButtonsContainer button,

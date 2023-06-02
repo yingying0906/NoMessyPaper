@@ -47,9 +47,9 @@ const controlContext = createContext({
   undo: () => {},
   redo: () => {},
 
-  setShapes: () => {},
-  setShapesMap: () => {},
-  setAnchorPoint: () => {},
+  // setShapes: () => {},
+  // setShapesMap: () => {},
+  // setAnchorPoint: () => {},
 });
 
 export default controlContext;

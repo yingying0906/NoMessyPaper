@@ -425,15 +425,19 @@ const NotePage = () => {
     updateShape(_selectedShapeId, { textColor });
   };
 
-  const changeTextValueFin = (textValue) => {
-    console.log("changeCurrTextValueFin");
-    if (selectedShapeId) {
+  const changeTextValueFin = (shapeId, textValue) => {
+    if (shapeId) {
+      selectedObj = {
+        selectedShapeId: shapeId,
+        ...shapesMap[shapes.filter((shapeId) => shapeId === shapeId)[0]],
+      };
       selectedObj.textValue = oriTextValue;
       oriTextValue = textValue;
       undoHandler.selectedObj = selectedObj;
       let cmdObj = new ChangeTextValueCommandObject(undoHandler);
       cmdObj.execute(textValue);
-      updateShape(selectedShapeId, { textValue });
+      updateShape(shapeId, { textValue });
+      selectedObj = null;
     }
   };
 
@@ -499,8 +503,8 @@ const NotePage = () => {
       setShapesMap({});
       setAnchorPoint({ x: 0, y: 0 });
     } else {
-      setShapes(mindmapNow.shapes);
-      setShapesMap(mindmapNow.shapesMap);
+      mindmapNow.shapes ? setShapes(mindmapNow.shapes) : setShapes([]);
+      mindmapNow.shapesMap ? setShapesMap(mindmapNow.shapesMap) : setShapesMap({});
       setAnchorPoint(mindmapNow.anchorPoint);
     }
   }, []);
@@ -584,9 +588,9 @@ const NotePage = () => {
                 undo: undo,
                 redo: redo,
 
-                setShapes: setShapes,
-                setShapesmap: setShapesMap,
-                setAnchorPoint: setAnchorPoint,
+                // setShapes: setShapes,
+                // setShapesMap: setShapesMap,
+                // setAnchorPoint: setAnchorPoint,
               }}
             >
               <NoteBord className="note-space" />

@@ -526,6 +526,7 @@ const ControlPanel = () => {
           </div>
           <div className="SaveButtonsContainer">
             <IconButton
+              className="Mode"
               sx={{ color: "black" }}
               onClick={() => {
                 updateMindmap(authUser.uid, noteId, {
@@ -564,8 +565,6 @@ const ControlPanel = () => {
             changeCurrAction,
             currBorderColor,
             changeCurrBorderColor,
-            currBorderColor,
-            changeCurrBorderColor,
             changeCurrBorderColorFin,
           })
         : currMode === "rect" ||
@@ -573,8 +572,6 @@ const ControlPanel = () => {
         ? RectUI({
             currAction,
             changeCurrAction,
-            currFillColor,
-            changeCurrFillColor,
             currBorderColor,
             changeCurrBorderColor,
             changeCurrBorderColorFin,
@@ -587,8 +584,6 @@ const ControlPanel = () => {
         ? EllipseUI({
             currAction,
             changeCurrAction,
-            currFillColor,
-            changeCurrFillColor,
             currBorderColor,
             changeCurrBorderColor,
             changeCurrBorderColorFin,

@@ -25,7 +25,7 @@ export default class AddShapeCommandObject extends CommandObject {
       // this.oldValue = selectedObj.borderWidth; // object's current color
       // this.newValue = newWidth; //fillColorWidget.currFillColor; // get the color widget's current color
       // selectedObj.fillColor = this.newValue; // actually change
-      console.log('execute add shape');
+      console.log('execute add shape ' + selectedObj.selectedShapeId);
 
       // Note that this command object must be a NEW command object so it can be
       // registered to put it onto the stack
@@ -39,10 +39,11 @@ export default class AddShapeCommandObject extends CommandObject {
   /* override to undo the operation of this command
    */
   undo() {
-    console.log('undo add shape');
+    console.log('undo add shape ' + this.targetObject.selectedShapeId);
     // this.targetObject.borderWidth = this.oldValue;
     // maybe also need to fix the palette to show this object's color?
     this.undoHandler.UndoAddShape(this.targetObject.selectedShapeId);
+    console.log("fin");
   }
 
   /* override to redo the operation of this command, which means to

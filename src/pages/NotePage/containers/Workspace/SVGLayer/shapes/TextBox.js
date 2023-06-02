@@ -26,7 +26,8 @@ const TextBox = ({
 
   const handleBlur = (e) => {
     if (localvalue !== e.target.value) {
-      changeTextValueFin(e.target.value);
+      console.log(e.target.value);
+      changeTextValueFin(id, e.target.value);
       setTextValue(e.target.value);
     }
   };
