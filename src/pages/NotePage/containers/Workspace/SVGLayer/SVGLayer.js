@@ -708,9 +708,9 @@ const SVGLayer = () => {
           floodColor="rgba(0, 0, 0, 0.7)"
         />
       </filter>
-      {shapes.map((shapeId, idx) => {
+      {shapes ? shapes.map((shapeId, idx) => {
         return renderShape(shapesMap[shapeId], idx);
-      })}
+      }) : null }
       {drawing && renderTempShape()}
 
       {/* temp text-box text */}
