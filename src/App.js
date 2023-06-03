@@ -1,6 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ControlContextProvider } from "./pages/NotePage/contexts/control-context"
 
 import NavBar from "./containers/NavBar/NavBar";
 import IntroPage from "./pages/IntroPage/IntroPage";
@@ -45,17 +46,20 @@ function App() {
 	return (
 		<div className="App">
 			<ThemeProvider theme={theme}>
-				<NavBar />
-				<Routes>
-					<Route path="/" element={<IntroPage />} />
-					<Route path="/Home" element={<HomePage />} />
-					<Route path="/Login" element={<LoginPage />} />
-					<Route path="/Add" element={<AddReferencePage />} />
-					<Route path="/Search" element={<SearchPage />} />
-					<Route path="/Account" element={<AccountPage />} />
-					<Route path="/Note/:noteId" element={<NotePage />} />
-				</Routes>
-				<SnackBarCustom />
+				<ControlContextProvider>
+					<NavBar />
+					<Routes>
+						<Route path="/" element={<IntroPage />} />
+						<Route path="/Home" element={<HomePage />} />
+						<Route path="/Login" element={<LoginPage />} />
+						<Route path="/Add" element={<AddReferencePage />} />
+						<Route path="/Search" element={<SearchPage />} />
+						<Route path="/Account" element={<AccountPage />} />
+						<Route path="/Note/:noteId" element={<NotePage />} />
+					</Routes>
+					<SnackBarCustom />
+				</ControlContextProvider>
+				
 			</ThemeProvider>
 		</div>
 	);
