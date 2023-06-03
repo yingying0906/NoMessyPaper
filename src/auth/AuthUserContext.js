@@ -45,6 +45,9 @@ const AuthUserProvider = ({ children }) => {
         .catch((error) => {
           console.error("Error retrieving API key:", error);
         });
+    } else {
+      console.log("no auth user or logout, clear api key");
+      setApiKey("");
     }
   }, [authUser, setAuthUser]);
 
