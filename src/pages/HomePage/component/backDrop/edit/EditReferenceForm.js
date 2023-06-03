@@ -76,6 +76,7 @@ const EditReferenceForm = () => {
         tags: editingFile.tags || "",
         link: editingFile.link || "",
       });
+      setSelectedFile(null);
 
       //loop editingfile and setCategories checked
       setCategories(
@@ -153,7 +154,7 @@ const EditReferenceForm = () => {
             ))}
 
             {editingFile.fileName ? (
-              <div style={{ color: "black" }}>
+              <div style={{ color: "black", wordWrap: "break-word" }}>
                 {editingFile && editingFile.fileName}
               </div>
             ) : (
@@ -170,7 +171,9 @@ const EditReferenceForm = () => {
 
             {selectedFile && (
               <div style={{ marginBottom: "4px" }}>
-                <span style={{ color: "black" }}>{selectedFile.name}</span>
+                <span style={{ color: "black", wordWrap: "break-word" }}>
+                  {selectedFile.name}
+                </span>
                 <IconButton onClick={() => setSelectedFile(null)}>
                   <ClearIcon />
                 </IconButton>
