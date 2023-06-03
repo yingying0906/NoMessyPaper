@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import ControlPanel from "./containers/ControlPanel/ControlPanel";
 import Workspace from "./containers/Workspace/Workspace";
 
-class NoteBord extends Component {
+class NoteBoard extends Component {
 
   constructor() {
     super();
@@ -19,4 +19,4 @@ class NoteBord extends Component {
   }
 }
 
-export default NoteBord;
+export default NoteBoard;

@@ -14,7 +14,7 @@ import ControlContext from "./contexts/control-context";
 import { Grid } from "@mui/material";
 import PdfViewer from "./PdfViewer/PdfViewer";
 
-import NoteBord from "./NoteBord";
+import NoteBoard from "./NoteBoard";
 
 const NotePage = () => {
   /* For board */
@@ -101,7 +101,7 @@ const NotePage = () => {
 
           <Grid item xs={pdfUrl ? 6 : 12}>
             {/* WORKSPACE */}
-              <NoteBord className="note-space" />
+              <NoteBoard className="note-space" />
           </Grid>
         </Grid>
       </div>
