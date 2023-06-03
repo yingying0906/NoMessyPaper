@@ -1,5 +1,5 @@
 import CommandObject from "./CommandObject";
-import { selectedObj } from "../../NotePage";
+import { selectedObj } from "../../contexts/control-context";
 
 
 export default class DeleteShapeCommandObject extends CommandObject {
