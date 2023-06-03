@@ -14,6 +14,8 @@ import { genId, defaultValues } from "../shared/util";
 
 // create a context with default values
 const controlContext = createContext({
+  resetState: () => {},
+
   currMode: "",
   changeCurrMode: () => {},
   currAction: "",
@@ -131,6 +133,32 @@ export class ControlContextProvider extends Component {
       DoChangeTextValue: this.DoChangeTextValue,
     };
   }
+
+  resetState = () => {
+    this.setState({
+      // controls
+      currMode: defaultValues.mode,
+      currAction: defaultValues.action,
+      currBorderColor: defaultValues.borderColor,
+      currBorderWidth: defaultValues.borderWidth,
+      currFillColor: defaultValues.fillColor,
+      currTextColor: defaultValues.textColor,
+      currTextValue: "",
+  
+      // workspace
+      // -- from db ---
+      // anchorPoint: { x: 0, y: 0 },
+      // shapes: [],
+      // shapesMap: {},
+      selectedShapeId: undefined,
+      selectedShapeType: undefined,
+  
+      // handling undo/redo
+      commandList: [],
+      currCommand: -1,
+      lastCommand: -1,
+    });
+  };
 
   registerExecution = (commandObject) => {
     let commandList = [...this.state.commandList];
@@ -551,6 +579,8 @@ export class ControlContextProvider extends Component {
     return (
       <controlContext.Provider
         value={{
+          resetState: this.resetState,
+          
           currMode,
           changeCurrMode: this.changeCurrMode,
           currAction,
