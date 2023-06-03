@@ -51,6 +51,8 @@ export const SearchInfoProvider = ({ children }) => {
 
       setNumOfResults("10");
       setSearchNumOfResults("10");
+
+      sessionStorage.clear();
     }
   }, [authUser, setAuthUser]);
 
