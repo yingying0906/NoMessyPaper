@@ -27,7 +27,7 @@ const NotePage = () => {
   const [pdfUrl, setPdfUrl] = React.useState(null);
   const { authUser } = React.useContext(AuthUserContext);
   const { references, mindmaps } = React.useContext(ReferenceContext);
-  const { shapes, shapesMap, anchorPoint, setShapes, setShapesMap, setAnchorPoint } = React.useContext(ControlContext);
+  const { shapes, shapesMap, anchorPoint, setShapes, setShapesMap, setAnchorPoint, resetState } = React.useContext(ControlContext);
 
   const noteName = references.find((ref) => ref.id === noteId)?.title;
 
@@ -63,6 +63,7 @@ const NotePage = () => {
       mindmapNow.shapesMap ? setShapesMap(mindmapNow.shapesMap) : setShapesMap({});
       setAnchorPoint(mindmapNow.anchorPoint);
     }
+    resetState();
   }, []);
 
   // auto save per 60 seconds
