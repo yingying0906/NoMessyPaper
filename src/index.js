@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 import { ReferenceProvider } from "./database/ReferenceContext";
 import { FormStateProvider } from "./database/FormStateContext";
+import { SearchInfoProvider } from "./pages/SearchPage/SearchInfoContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -21,7 +22,9 @@ root.render(
           <SnackBarProvider>
             <BackDropProvider>
               <FormStateProvider>
-                <App />
+                <SearchInfoProvider>
+                  <App />
+                </SearchInfoProvider>
               </FormStateProvider>
             </BackDropProvider>
           </SnackBarProvider>

@@ -12,6 +12,7 @@ import { LoadingButton } from "@mui/lab";
 
 import { Link } from "react-router-dom";
 import { AuthUserContext } from "../../auth/AuthUserContext";
+import { SearchInfoContext } from "./SearchInfoContext";
 import serpapi_logo from "../../assets/serpapi_logo.png";
 
 // 開兩個terminal
@@ -21,17 +22,24 @@ import serpapi_logo from "../../assets/serpapi_logo.png";
 const SearchPage = () => {
   const [loading, setLoading] = useState(false);
 
-  const [text, setText] = useState("");
-  const [keywords, setKeywords] = useState("");
-
-  const [fromYear, setFromYear] = useState("");
-  const [searchFromYear, setSearchFromYear] = useState("");
-
-  const [toYear, setToYear] = useState("");
-  const [searchToYear, setSearchToYear] = useState("");
-
-  const [numOfResults, setNumOfResults] = useState("10");
-  const [searchNumOfResults, setSearchNumOfResults] = useState("10");
+  const {
+    text,
+    setText,
+    keywords,
+    setKeywords,
+    fromYear,
+    setFromYear,
+    searchFromYear,
+    setSearchFromYear,
+    toYear,
+    setToYear,
+    searchToYear,
+    setSearchToYear,
+    numOfResults,
+    setNumOfResults,
+    searchNumOfResults,
+    setSearchNumOfResults,
+  } = React.useContext(SearchInfoContext);
 
   const { apiKey } = React.useContext(AuthUserContext);
 
