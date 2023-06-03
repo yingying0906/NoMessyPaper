@@ -57,6 +57,7 @@ const TextBox = ({
             backgroundColor: fillColor,
             color: textColor,
             border: `solid ${borderWidth}px ${borderColor}`,
+            resize: 'none',
           }}
           disabled={!texting}
           onFocus={handleFocus}
