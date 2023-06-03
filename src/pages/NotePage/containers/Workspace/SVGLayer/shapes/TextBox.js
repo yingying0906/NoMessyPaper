@@ -17,6 +17,7 @@ const TextBox = ({
   textValue,
   changeTextValueFin,
   handleStartResizing,
+  texting,
 }) => {
   const [localvalue, setTextValue] = useState(textValue);
 
@@ -57,9 +58,11 @@ const TextBox = ({
             color: textColor,
             border: `solid ${borderWidth}px ${borderColor}`,
           }}
-          // disabled={true}
+          disabled={!texting}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          // onInput={() => {console.log('onInput')}}
+          // onChange={() => {console.log('onChange')}}
         ></textarea>
       </foreignObject>
       {selected ? (

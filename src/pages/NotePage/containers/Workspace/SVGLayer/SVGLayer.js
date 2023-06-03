@@ -10,12 +10,6 @@ import { selectShadowId } from "../../../shared/util";
 import { setRef } from "@mui/material";
 import { FaPen } from "react-icons/fa";
 
-import { AuthUserContext } from "../../../../../auth/AuthUserContext";
-import { ReferenceContext } from "../../../../../database/ReferenceContext";
-import { useParams } from "react-router-dom";
-import { updateMindmap } from "../../../../../database/controlDatabase";
-import { SnackBarContext } from "../../../../../containers/SnackBars/SnackBarContext";
-
 const SVGLayer = () => {
   const {
     currMode,
@@ -61,7 +55,6 @@ const SVGLayer = () => {
     y: undefined,
   });
   const [texting, setTexting] = useState(false);
-  // const [resCurrPoint, setResCurrPoint] = useState({ x: undefined, y: undefined });
 
   const [grabbing, setGrabbing] = useState(false);
 
@@ -591,6 +584,7 @@ const SVGLayer = () => {
           textValue,
           changeTextValueFin,
           handleStartResizing,
+          texting,
         });
       }
       case "line": {
