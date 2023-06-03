@@ -192,7 +192,7 @@ const BibtexReference = () => {
             </Button>
             {formState.selectedFile && (
               <div style={{ marginBottom: "4px" }}>
-                <span style={{ color: "black" }}>
+                <span style={{ wordWrap: "break-word" }}>
                   {formState.selectedFile.name}
                 </span>
                 <IconButton
