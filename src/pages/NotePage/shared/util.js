@@ -14,6 +14,6 @@ export const defaultValues = {
   borderColor: "rgba(100,100,100,1)",
   borderWidth: 1,
   // fillColor: "#9fce63",
-  fillColor: "rgba(255,255,255,1)",
+  fillColor: "rgba(200,200,200,1)",
   textColor: "rgba(0,0,0,1)",
 };
