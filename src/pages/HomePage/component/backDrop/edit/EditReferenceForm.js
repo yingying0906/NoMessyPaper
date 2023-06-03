@@ -76,7 +76,6 @@ const EditReferenceForm = () => {
         tags: editingFile.tags || "",
         link: editingFile.link || "",
       });
-      setSelectedFile(null);
 
       //loop editingfile and setCategories checked
       setCategories(
@@ -110,7 +109,11 @@ const EditReferenceForm = () => {
       journal: journal,
       tags: tags,
       link: link,
-      fileName: selectedFile ? selectedFile.name : null,
+      fileName: selectedFile
+        ? selectedFile.name
+        : editingFile.fileName
+        ? editingFile.fileName
+        : "",
       categories: writeCategories,
     };
     editReference(authUser.uid, editingFile.id, ref);
