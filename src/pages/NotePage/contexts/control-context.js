@@ -37,6 +37,7 @@ const controlContext = createContext({
   changeCurrTextColor: () => {},
   changeCurrTextColorFin: () => {},
 
+  changeTextValue: () => {},
   changeTextValueFin: () => {},
 
   anchorPoint: {},
@@ -437,6 +438,13 @@ export class ControlContextProvider extends Component {
     this.updateShape(selectedShapeId, { textColor });
   };
 
+  changeTextValue = (id, textValue) => {
+    console.log("changeCurrTextValue");
+    if (id) {
+      this.updateShape(this.state.selectedShapeId, { textValue });
+    }
+  }
+
   changeTextValueFin = (id, textValue) => {
     // if(!isMoved) return;
     // isMoved = false;
@@ -603,6 +611,7 @@ export class ControlContextProvider extends Component {
           changeCurrTextColorFin: this.changeCurrTextColorFin,
 
           currTextValue,
+          changeTextValue: this.changeTextValue,
           changeTextValueFin: this.changeTextValueFin,
 
           anchorPoint,

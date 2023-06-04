@@ -15,23 +15,28 @@ const TextBox = ({
   borderWidth,
   selected,
   textValue,
+  changeTextValue,
   changeTextValueFin,
   handleStartResizing,
   texting,
 }) => {
-  const [localvalue, setTextValue] = useState(textValue);
+  // const [localvalue, setTextValue] = useState(textValue);
 
-  const handleFocus = (e) => {
-    setTextValue(e.target.value);
-  };
+  // const handleFocus = (e) => {
+  //   setTextValue(e.target.value);
+  // };
 
-  const handleBlur = (e) => {
-    if (localvalue !== e.target.value) {
-      console.log(e.target.value);
-      changeTextValueFin(id, e.target.value);
-      setTextValue(e.target.value);
-    }
-  };
+  // const handleBlur = (e) => {
+  //   if (localvalue !== e.target.value) {
+  //     console.log(e.target.value);
+  //     changeTextValueFin(id, e.target.value);
+  //     setTextValue(e.target.value);
+  //   }
+  // };
+
+  const handleChangeValue = (e) => {
+    changeTextValue(id, e.target.value);
+  }
 
   return (
     <g>
@@ -60,10 +65,10 @@ const TextBox = ({
             resize: 'none',
           }}
           disabled={!texting}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          // onFocus={handleFocus}
+          // onBlur={handleBlur}
           // onInput={() => {console.log('onInput')}}
-          // onChange={() => {console.log('onChange')}}
+          onChange={handleChangeValue}
         ></textarea>
       </foreignObject>
       {selected ? (
