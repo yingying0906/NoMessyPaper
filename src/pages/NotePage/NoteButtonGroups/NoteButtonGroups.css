@@ -1,0 +1,19 @@
+.notebuttongroups {
+  position: sticky;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+}
+
+.notebuttongroups * {
+  padding: 0;
+}

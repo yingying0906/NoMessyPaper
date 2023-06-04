@@ -139,6 +139,28 @@ const updateMindmap = (UID, RefID, Obj) => {
   set(reference, Obj);
 };
 
+// markdown
+const writeNewMarkdown = (UID, RefId) => {
+  const item = {
+    content: "",
+  };
+
+  const reference = ref(db, `markdownList/${UID}/${RefId}`);
+
+  set(reference, item)
+    .then(() => {
+      console.log("new markdown created");
+    })
+    .catch((error) => {
+      console.log("error: ", error);
+    });
+};
+
+const updateMarkdown = (UID, RefID, Obj) => {
+  const reference = ref(db, `markdownList/${UID}/${RefID}`);
+  set(reference, Obj);
+};
+
 export {
   writeNewReference,
   deleteReference,
@@ -149,4 +171,6 @@ export {
   enterLink,
   writeNewMindmap,
   updateMindmap,
+  writeNewMarkdown,
+  updateMarkdown,
 };

@@ -12,6 +12,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ReferenceProvider } from "./database/ReferenceContext";
 import { FormStateProvider } from "./database/FormStateContext";
 import { SearchInfoProvider } from "./pages/SearchPage/SearchInfoContext";
+import MarkDownContextProvider from "./pages/NotePage/MarkDownEditor/MarkDownContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,7 +24,9 @@ root.render(
             <BackDropProvider>
               <FormStateProvider>
                 <SearchInfoProvider>
-                  <App />
+                  <MarkDownContextProvider>
+                    <App />
+                  </MarkDownContextProvider>
                 </SearchInfoProvider>
               </FormStateProvider>
             </BackDropProvider>

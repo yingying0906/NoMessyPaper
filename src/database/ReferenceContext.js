@@ -139,6 +139,43 @@ export const ReferenceProvider = ({ children }) => {
     }
   }, [authUser, setAuthUser]);
 
+  const [markdownRead, setMarkdownRead] = React.useState([]);
+
+  React.useEffect(() => {
+    console.log("hey");
+    if (authUser) {
+      const markdownRef = ref(db, `markdownList/${authUser?.uid}`);
+
+      const handleMarkdownChange = (snapshot) => {
+        if (snapshot.exists()) {
+          console.log("new markdown");
+          const markdownData = snapshot.val();
+          const markdownArray = Object.keys(markdownData).map((key) => ({
+            id: key,
+            ...markdownData[key],
+          }));
+
+          setMarkdownRead(markdownArray);
+
+          console.log("markdown retrieved");
+        } else {
+          console.log("no markdown");
+          setMarkdownRead([]);
+        }
+      };
+
+      const markdownListener = onValue(markdownRef, (snapshot) => {
+        handleMarkdownChange(snapshot);
+      });
+      return () => {
+        markdownListener();
+      };
+    } else {
+      console.log("no auth user or logout, clear markdown");
+      setMarkdownRead("");
+    }
+  }, [authUser, setAuthUser]);
+
   const contextValue = {
     categories,
     setCategories,
@@ -148,6 +185,8 @@ export const ReferenceProvider = ({ children }) => {
     setLoading,
     mindmaps,
     setMindmaps,
+    markdownRead,
+    setMarkdownRead,
   };
 
   return (
